@@ -2,110 +2,117 @@
 <html lang="en">
 
 <head>
-	<title><?= isset($title) ? $title : 'Login - Reads' ?></title>
 
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<!-- Tell the browser to be responsive to screen width -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<?= base_url() ?>public/plugins/fontawesome-free/css/all.min.css">
-	<!-- Ionicons -->
-	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-	<!-- icheck bootstrap -->
-	<link rel="stylesheet" href="<?= base_url() ?>public/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-	<!-- Theme style -->
-	<link rel="stylesheet" href="<?= base_url() ?>public/dist/css/adminlte.css">
-	<!-- Google Font: Source Sans Pro -->
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	<title>Login SIMPELA PPS UMY</title>
+
+	<!-- Custom fonts for this template-->
+	<link href="<?= base_url() ?>/public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link
+		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="<?= base_url() ?>/public/dist/css/sb-admin-2.min.css" rel="stylesheet">
+
 </head>
 
-<body class="hold-transition login-page kabah">
+<body class="bg-gradient-success">
 
-	<div class="login-box">
-		<div class="login-logo">
-			<a href="<?= site_url(); ?>">
-				<img src="<?= base_url() ?>public/dist/img/logopps.png" alt="Program Pascasarjana UMY">
+	<div class="container">
 
-			</a>
-		</div>
+		<!-- Outer Row -->
+		<div class="row justify-content-center">
 
-		<?php if (isset($msg) || validation_errors() !== '') : ?>
-		<div class="alert alert-warning alert-dismissible">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-			<h4><i class="icon fa fa-warning"></i> Alert!</h4>
-			<?= validation_errors(); ?>
-			<?= isset($msg) ? $msg : ''; ?>
-		</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('error')) : ?>
-		<div class="alert alert-danger">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-			<?= $this->session->flashdata('error') ?>
-		</div>
-		<?php endif; ?>
-		<?php if ($this->session->flashdata('success')) : ?>
-		<div class="alert alert-success">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-			<?= $this->session->flashdata('success') ?>
-		</div>
-		<?php endif; ?>
+			<div class="col-xl-10 col-lg-12 col-md-9">
 
-		<!-- /.login-logo -->
-		<div class="card">
-			<div class="card-body login-card-body">
-				<p class="login-box-msg">Selamat datang, silakan login dahulu.</p>
+				<div class="card o-hidden border-0 shadow-lg my-5">
+					<div class="card-body p-0">
+						<!-- Nested Row within Card Body -->
+						<div class="row">
+							<div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+							<div class="col-lg-6">
+								<div class="p-5">
+									<div class="text-center">
+										<img src="<?=base_url('public/dist/img/logopps.png'); ?>" />
+										<h1 class="h4 text-gray-900 mb-4">SIM PELAYANAN</h1>
+									</div>
 
-				<?php echo form_open(base_url('auth/login'), 'class="login-forsm" '); ?>
+									<?php if (isset($msg) || validation_errors() !== '') : ?>
+									<div class="alert alert-warning alert-dismissible">
+										<button type="button" class="close" data-dismiss="alert"
+											aria-hidden="true">×</button>
+										<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+										<?= validation_errors(); ?>
+										<?= isset($msg) ? $msg : ''; ?>
+									</div>
+									<?php endif; ?>
+									<?php if ($this->session->flashdata('error')) : ?>
+									<div class="alert alert-danger">
+										<a href="#" class="close" data-dismiss="alert" aria-label="close"
+											title="close">×</a>
+										<?= $this->session->flashdata('error') ?>
+									</div>
+									<?php endif; ?>
+									<?php if ($this->session->flashdata('success')) : ?>
+									<div class="alert alert-success">
+										<a href="#" class="close" data-dismiss="alert" aria-label="close"
+											title="close">×</a>
+										<?= $this->session->flashdata('success') ?>
+									</div>
+									<?php endif; ?>
+
+									<?php echo form_open(base_url('auth/login'), 'class="user" '); ?>
 
 
-				<div class="input-group mb-3">
-					<input type="text" name="username" id="username" class="form-control" placeholder="Nama Pengguna">
-					<div class="input-group-append">
-						<div class="input-group-text">
-							<span class="fas fa-envelope"></span>
+									<div class="form-group">
+										<input type="username" name="username" class="form-control form-control-user"
+											id="username" aria-describedby="username"
+											placeholder="Nomor Mahasiswa (NIM)">
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" class="form-control form-control-user"
+											id="password" placeholder="Password">
+									</div>
+								
+									<input type="submit" name="submit" class="btn btn-danger btn-user btn-block">
+									
+									<hr>
+
+									<?php echo form_close(); ?>
+									<hr>
+									<div class="text-center">
+										<a class="small" href="forgot-password.html">Forgot Password?</a>
+									</div>
+									<div class="text-center">
+										<a class="small" href="register.html">Create an Account!</a>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="input-group mb-3">
-					<input type="password" name="password" id="password" class="form-control" placeholder="Sandi">
-					<div class="input-group-append">
-						<div class="input-group-text">
-							<span class="fas fa-lock"></span>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<!--  <div class="col-8">
-              
-                   
-                   <label for="pt-3">
-                       <a href="#">Lupa kata sandi?</a>
-                    </label> 
-                
-                </div>-->
-					<!-- /.col -->
-					<div class="col-12">
-						<!--<button type="submit"  name="submit" id="submit" class="btn btn-primary btn-block btn-flat">Login</button>-->
-						<input type="submit" name="submit" id="submit" class="btn btn-primary form-control" value="Login">
-
-					</div>
-					<!-- /.col -->
-				</div>
-				<?php echo form_close(); ?>
 
 			</div>
-			<!-- /.login-card-body -->
+
 		</div>
+
 	</div>
-	<!-- /.login-box -->
 
+	<!-- Bootstrap core JavaScript-->
+	<script src="<?= base_url() ?>/public/vendor/jquery/jquery.min.js"></script>
+	<script src="<?= base_url() ?>/public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-	<!-- jQuery -->
-	<script src="<?= base_url() ?>public/plugins/jquery/jquery.min.js"></script>
-	<!-- Bootstrap 4 -->
-	<script src="<?= base_url() ?>public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- Core plugin JavaScript-->
+	<script src="<?= base_url() ?>/public/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="<?= base_url() ?>/public/js/sb-admin-2.min.js"></script>
 
 </body>
 

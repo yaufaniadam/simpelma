@@ -15,7 +15,7 @@ class Profile extends MY_Controller
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['user'] = $this->profile_model->get_user_detail();
-				$data['title'] = 'Admin Profile';
+				$data['title'] = 'Profil Saya';
 				$data['view'] = 'profile/index';
 				$this->load->view('layout/layout', $data);
 			} else {
@@ -53,7 +53,7 @@ class Profile extends MY_Controller
 			}
 		} else {
 			$data['user'] = $this->profile_model->get_user_detail();
-			$data['title'] = 'Admin Profile';
+			$data['title'] = 'Profil Saya';
 			$data['view'] = 'profile/index';
 			$this->load->view('layout/layout', $data);
 		}

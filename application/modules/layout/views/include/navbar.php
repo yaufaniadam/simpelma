@@ -6,7 +6,7 @@
   <i class="fa fa-bars"></i>
 </button>
 
-<h1 class="h4 ml-2 mb-0 text-gray-800"><?=$title; ?></h1>
+<h1 class="h4 ml-2 mb-0 text-gray-800"><?=(isset($title)) ? $title : ''; ?></h1>
 <!-- Topbar Search 
 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
   <div class="input-group">
@@ -93,11 +93,10 @@
 
   
   <div class="topbar-divider d-none d-sm-block"></div>
-
   <!-- Nav Item - User Information -->
   <li class="nav-item dropdown no-arrow">
     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $this->session->userdata("username"); ?> </span>
+      <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo getUserbyId($this->session->userdata("user_id")); ?> </span>
       <?php
         $photo = getUserPhoto($this->session->userdata('user_id'));
           if ($photo == '') { ?>
@@ -112,7 +111,7 @@
     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
       <a class="dropdown-item" href="<?=base_url('profile'); ?>">
         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-        Profile
+        Profil Saya
       </a>
          
       <div class="dropdown-divider"></div>
@@ -121,7 +120,7 @@
         Logout
       </a>
     </div>
-  </li>
+  </li> 
 
 </ul>
 

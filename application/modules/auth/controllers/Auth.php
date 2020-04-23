@@ -11,9 +11,9 @@
 				redirect ('auth/login');
 			} else {
 				if(!$this->session->has_userdata('role')==1) {	
-					redirect ('mahasiswa/dashboard');
+					redirect ('mahasiswa/surat');
 				} else {
-					redirect ('admin/dashboard');
+					redirect ('admin/surat');
 				}
 			}
 		}
@@ -45,9 +45,9 @@
 						$this->session->set_userdata($user_data);
 							
 						if($this->session->userdata('role')==1) {
-							redirect(base_url('admin/dashboard'), 'refresh'); 
+							redirect(base_url('admin/surat'), 'refresh'); 
 						}else {
-							redirect(base_url('mahasiswa/dashboard'), 'refresh');
+							redirect(base_url('mahasiswa/surat'), 'refresh');
 						}					
 					}
 

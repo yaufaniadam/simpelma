@@ -5,21 +5,9 @@
 function getUserbyId($id)
 {
 	$CI = &get_instance();
-	return $CI->db->get_where('ci_users', array('id' => $id))->row_array()['firstname'];
+	return $CI->db->get_where('profil', array('id_user' => $id))->row_array()['nama'];
 }
 
-function getAllResiden()
-{
-	$CI = &get_instance();
-	$query = $CI->db->get('residen');
-	return $query->result_array();
-}
-
-function getAllDivisi(){
-	$CI = &get_instance();
-	$query = $CI->db->get('divisi');
-	return $query->result_array();
-}
 
 function indonesian_date ($timestamp = '', $date_format = 'j F Y', $suffix = 'WIB') {
 	if (trim ($timestamp) == '')
@@ -58,7 +46,7 @@ function getUserPhoto($id)
 {
 
     $CI = &get_instance();
-    return $CI->db->get_where('mahasiswa', array('user_id' => $id))->row_array()['photo'];
+    return $CI->db->get_where('profil', array('id_user' => $id))->row_array()['photo'];
 }
 
 function transposeData($data)
@@ -71,6 +59,17 @@ function transposeData($data)
     }
     return $retData;
 }
+
+function countSurat($status) {
+	$CI = &get_instance();
+	$query = $CI->db->query("SELECT COUNT(*) as JUMLAH
+		FROM surat_status s
+		WHERE s.id_surat NOT IN (SELECT ss.id_surat FROM surat_status ss WHERE ss.id_status='2')
+        ");
+		$result = $query->row_array();
+		return $result['JUMLAH'];
+}
+
 
 
 

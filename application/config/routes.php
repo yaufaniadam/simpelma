@@ -54,5 +54,5 @@ $route['default_controller'] = 'auth';
 // setting route for admin
 $route['admin'] = 'auth';
 
-$route['404_override'] = '';
+$route['404_override'] = 'layout/error404';
 $route['translate_uri_dashes'] = FALSE;

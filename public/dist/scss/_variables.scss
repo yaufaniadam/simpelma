@@ -24,13 +24,14 @@ $red: #b0272b !default;
 $orange: #fd7e14 !default;
 $yellow: #fbc800 !default;
 $green: #065139!default;
-$green-400: #067250!default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
 
 // Custom Colors
 $brand-google: #ea4335;
 $brand-facebook: #3b5998;
+$green-400: #067250!default;
+$white-op-9:rgba(255,255,255,0.9);
 
 // Set Contrast Threshold
 $yiq-contrasted-threshold: 195 !default;
@@ -75,3 +76,30 @@ $transition-collapse: height .15s ease !default;
 // Dropdowns
 $dropdown-font-size: 0.85rem;
 $dropdown-border-color: $border-color;
+
+// custom warna
+$perak:   #eeeced !default;
+$ijomuda: #8fce90 !default;
+
+$colors: () !default;
+$colors: map-merge(
+  (
+    "perak":      $perak,
+    "ijomuda":      $ijomuda
+  ),
+  $colors
+);
+
+$perak:        $perak !default;
+$ijomuda:        $ijomuda !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    "perak":      $perak,
+    "ijomuda":      $ijomuda
+  ),
+  $theme-colors
+);
+
+$table-color:#202124 !default;

@@ -4,57 +4,34 @@ class Surat extends Admin_Controller
 
 	public function __construct()
 	{
-		parent::__construct();	
+		parent::__construct();			
+		$this->load->model('surat_model', 'surat_model');
 	}
  
 	public function index()
-	{		
-		$query = $this->db->query("SELECT * FROM surat");
-
-		$result = $query->result_array();
-
-		$data['query'] = $result;
+	{				
+		$data['query'] = $this->surat_model->get_surat();
 		$data['title'] = 'Surat';
-		//$data['deskripsi'] = 'Tampilkan semua ilmiah dari semua residen. dan semua tahap';
-		$data['view'] = 'surat/index.php';
+		$data['view'] = 'surat/index';
 		$this->load->view('layout/layout', $data);
+	}
+	public function detail($id_surat=0)
+	{				
+		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
+		$data['title'] = 'Detail Surat';
+		$data['view'] = 'surat/detail';
+		$this->load->view('layout/layout', $data);
+	}
+	public function proses_surat($id_surat=0)
+	{				
+		$this->db->set('id_status', 2);			
+		$this->db->set('date', 'NOW()', FALSE);		
+		$this->db->set('id_surat', $id_surat);	
+		$this->db->insert('surat_status');
+
+		redirect(base_url('admin/surat/detail/'.$id_surat));
 	}
 	
-	public function tahap($tahap)
-	{		
-		$query = $this->db->query("SELECT i.judul_ilmiah, i.date, k.kategori, rt.tahap, r.nama_lengkap FROM ilmiah i
-		LEFT JOIN kategori_ilmiah k ON k.id=i.id_kategori		
-		LEFT JOIN residen r ON r.id=i.id_residen		
-		LEFT JOIN residen_tahap rt ON rt.id=i.id_tahap	
-		WHERE i.id_tahap=$tahap
-		");
-		$result = $query->result_array();
-
-		$data['query'] = $result;
-		$data['id_menu'] = "ilmiah";
-		$data['class_menu'] = "tahap".$tahap;
-		$data['title'] = 'Ilmiah Tahap '. $tahap;
-		//$data['deskripsi'] = 'Tampilkan semua ilmiah dari semua residen berdasarkan tahap';
-		$data['view'] = 'ilmiah/index.php';
-		$this->load->view('layout/layout', $data);
-	}
-	public function divisi()
-	{		
-		$query = $this->db->query("SELECT i.judul_ilmiah, i.date, k.kategori, rt.tahap, r.nama_lengkap FROM ilmiah i
-		LEFT JOIN kategori_ilmiah k ON k.id=i.id_kategori		
-		LEFT JOIN residen r ON r.id=i.id_residen		
-		LEFT JOIN residen_tahap rt ON rt.id=i.id_tahap	
-		WHERE (rt.tahap='2a' OR rt.tahap='2b')
-		");
-		$result = $query->result_array();
-
-		$data['query'] = $result;
-		$data['id_menu'] = "ilmiah";
-		$data['class_menu'] = "divisi";
-		$data['title'] = 'Ilmiah Semua Divisi ';
-		$data['deskripsi'] = 'Tampilkan semua ilmiah dari semua residen berdasarkan Divisi. Yg tampil hanya tahap 2a dan 2b saja';
-		$data['view'] = 'ilmiah/index.php';
-		$this->load->view('layout/layout', $data);
-	}
+	
 	
 }

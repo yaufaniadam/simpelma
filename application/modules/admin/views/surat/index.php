@@ -2,56 +2,37 @@
 	<div class="col-12">
 		<!-- fash message yang muncul ketika proses penghapusan data berhasil dilakukan -->
 		<?php if ($this->session->flashdata('msg') != '') : ?>
-		<div class="alert alert-success flash-msg alert-dismissible">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-			<h4>Success!</h4>
-			<?= $this->session->flashdata('msg'); ?>
-		</div>
-		<?php endif; ?>
-
-
-		<div class="card shadow">
-			<div class="card-header py-3">
-              Filter
-            </div>
-
-			<div class="card-body">
-
-				<table id="tb_penelitian" class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th style="width:80%">Kategori Surat</th>
-							<th style="width:80%">Yang Mengajukan</th>
-							<th style="width:80%">Status</th>
-							<th style="width:80%">Tanggal</th>
-							<th class="text-center">Aksi</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ($query as $surat) {  ?>
-						<tr>
-							<td><?= $surat['kategori_surat']; ?></td>
-
-							<td class="text-center">
-								<a class="btn btn-default btn-sm">
-									<i class="fa fa-search" style="color:;"></i>
-								</a>
-								<a class="btn btn-default btn-sm">
-									<i class="fas fa-pencil-alt" style="color:;"></i>
-								</a>
-								<a href="" style="color:#fff;" title="Hapus" class="delete btn btn-sm btn-danger"
-									data-toggle="modal" data-target="#confirm-delete"> <i
-										class="fa fa-trash-alt"></i></a>
-							</td>
-						</tr>
-						<?php } ?>
-					</tbody>
-					</tfoot>
-				</table>
+			<div class="alert alert-success flash-msg alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				<h4>Success!</h4>
+				<?= $this->session->flashdata('msg'); ?>
 			</div>
-			<!-- /.card-body -->
-		</div>
-		<!-- /.card -->
+		<?php endif; ?>
+		<?php
+			if ($query) {  ?>
+		<table id="datatablse" class="table table-bordered">
+			<tbody>
+				<?php
+				echo "<pre>";				
+					print_r($query);
+				echo "<pre>"; 
+
+				foreach ($query as $surat) {  ?>
+					<tr>
+						<td><a href="<?=base_url('admin/surat/detail/'.$surat['id_surat']); ?>"><?=$surat['kategori_surat']; ?></a> &raquo; <?=$surat['nama']; ?> <?=($surat['id_status'] == 1) ? '<span class="badge badge-danger">Baru</span>' : ''; ?></td>
+						
+					
+						<td><?=$surat['status']; ?> </td>
+					</tr>
+				<?php } ?>
+			</tbody>
+			</tfoot>
+		</table>
+		<?php } else { ?>
+
+			<p class="lead">Belum ada Surat</p>
+			
+		<?php } ?>			
 	</div>
 	<!-- /.col -->
 </div>

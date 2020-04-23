@@ -25,10 +25,10 @@
   align-items: stretch;
   justify-content: center;
   .icon {
-    background: fade-out($black, .85);
+    background: fade-out($black, .6);
     display: inline-block;
     padding: $btn-padding-y $btn-padding-x;
-  }
+  } 
   .text {
     display: inline-block;
     padding: $btn-padding-y $btn-padding-x;
@@ -51,6 +51,3 @@
   }
 }
 
-.custom-select {
-background:transparent;
-}

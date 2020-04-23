@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title><?=$title; ?></title>
+  <title><?=(isset($title)) ? $title : 'SIMPELMA PPs UMY'; ?></title>
 
   <!-- Custom fonts for this template-->
   <link href="<?= base_url() ?>public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -57,7 +57,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-			<span>Copyright &copy; Copyright &copy; 2020 <a href="http://pascasarjana.umy.ac.id">Program Pascasarjan UMY</a>. 
+			<span>Copyright &copy; 2020 <a href="http://pascasarjana.umy.ac.id">Program Pascasarjan UMY</a>. 
 			All rights reserved.</span>
           </div>
         </div>
@@ -117,9 +117,11 @@
 
 <!-- page script -->
 <script>
+
 	$(function () {
-		$("#tb_penelitian").DataTable();
-	});
+		$("#datatable").DataTable();
+  });
+
 
   // menu sidebar
   if($("#menu_<?=$this->router->fetch_class(); ?>").hasClass('has_child')) {    
