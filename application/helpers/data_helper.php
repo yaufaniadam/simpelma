@@ -64,7 +64,7 @@ function countSurat($status) {
 	$CI = &get_instance();
 	$query = $CI->db->query("SELECT COUNT(*) as JUMLAH
 		FROM surat_status s
-		WHERE s.id_surat NOT IN (SELECT ss.id_surat FROM surat_status ss WHERE ss.id_status='2')
+		WHERE s.id_surat NOT IN (SELECT ss.id_surat FROM surat_status ss WHERE ss.id_status='2') AND s.id_status!='4'
         ");
 		$result = $query->row_array();
 		return $result['JUMLAH'];

@@ -18,6 +18,7 @@
   <!-- Custom styles for this template-->
   <link href="<?= base_url() ?>public/dist/css/sb-admin-2.min.css" rel="stylesheet">
   <link href="<?= base_url() ?>public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="<?= base_url() ?>public/vendor/dropify/dist/css/dropify.min.css" rel="stylesheet">
 
 </head>
 
@@ -137,6 +138,21 @@
         $(this).remove(); 
     });
   }, 1000);
+</script>
+
+<script type="text/javascript" src="<?php echo base_url().'public/vendor/dropify/dist/js/dropify.min.js'?>"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.dropify').dropify({
+            messages: {
+                default: 'Drag atau drop untuk memilih gambar',
+                replace: 'Ganti',
+                remove:  'Hapus',
+                error:   'error'
+            }
+        });
+    });
+     
 </script>
 
 </body>

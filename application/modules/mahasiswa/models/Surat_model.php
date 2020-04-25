@@ -3,19 +3,15 @@ class Surat_model extends CI_Model
 {
     public function get_surat_bymahasiswa($id_mhs)
     {
-       /* $query = $this->db->query("SELECT s.id, s.id_kategori_surat, k.kategori_surat, ss.id_status,  
-        (SELECT status FROM status WHERE id=ss.id_status) as status, DATE_FORMAT(ss.date,'%d %M %Y') as date FROM surat s
-        LEFT JOIN surat_status ss ON ss.id_surat = s.id
+        $query = $this->db->query("SELECT ss.id, ss.id_surat,ss.id_status, st.status, s.id_kategori_surat, k.kategori_surat, s.id_mahasiswa, p.nama FROM surat_status ss
+        LEFT JOIN surat s ON s.id = ss.id_surat
         LEFT JOIN kategori_surat k ON k.id = s.id_kategori_surat
-        LEFT JOIN ci_users m ON m.id= s.id_mahasiswa
-        WHERE s.id_mahasiswa = '$id_mhs'
-        ORDER BY s.id DESC
-        ");*/
-
-        $query = $this->db->query("SELECT * FROM surat s
-        ORDER BY s.id DESC"
-        );
-
+        LEFT JOIN profil p ON p.id_user = s.id_mahasiswa
+        LEFT JOIN keterangan_surat ks ON ks.id_surat = s.id
+      
+        LEFT JOIN status st ON st.id = ss.id_status
+        WHERE ss.id in (SELECT max(ss.id) FROM surat_status ss  GROUP BY ss.id_surat) AND s.id_mahasiswa = '$id_mhs'
+        ORDER BY s.id DESC");        
         return $result = $query->result_array();
     }
     public function get_detail_surat($id_surat)
@@ -42,4 +38,9 @@ class Surat_model extends CI_Model
     {
         return $this->db->insert('surat', $data);
     }
+    function simpan_upload($judul,$gambar){
+        $hasil=$this->db->query("INSERT INTO keterangan_surat(ket_value,gambar) VALUES ('$judul','$gambar')");
+        return $hasil;
+    }
+
 }

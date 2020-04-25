@@ -13,9 +13,6 @@
 		<table id="datatablse" class="table table-bordered">
 			<tbody>
 				<?php
-				echo "<pre>";				
-					print_r($query);
-				echo "<pre>"; 
 
 				foreach ($query as $surat) {  ?>
 					<tr>
@@ -32,7 +29,11 @@
 
 			<p class="lead">Belum ada Surat</p>
 			
-		<?php } ?>			
+		<?php } 
+		echo "<pre>";				
+			print_r($query);
+		echo "<pre>"; 
+		?>			
 	</div>
 	<!-- /.col -->
 </div>

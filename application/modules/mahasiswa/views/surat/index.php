@@ -17,7 +17,13 @@
 					<tr>
 						<td><a href="<?=base_url('mahasiswa/surat/detail/'.$surat['id']); ?>"><?=$surat['kategori_surat']; ?></a> <?=($surat['id_status'] == 1) ? '<span class="badge badge-danger">Baru</span>' : ''; ?></td>
 						
-						<td><?=$surat['date']; ?> </td>
+						<td><?php if( $surat['id_status'] == 4) { ?> 
+							<?= $surat['status']; ?> <a class="btn btn-warning btn-sm" href="<?= base_url('mahasiswa/surat/tambah/'.$surat['id_surat']); ?>">Lengkapi</a>
+						<?php } else {
+							echo $surat['status'];
+						} ?>
+						
+						</td>
 					</tr>
 				<?php } ?>
 			</tbody>
