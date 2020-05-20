@@ -5,7 +5,7 @@ class Admin_Controller extends MY_Controller
     {
         parent::__construct();
         
-        if( !($this->session->userdata('role') == 1 ) )
+        if( ($this->session->userdata('role') == 3 ) )
         {
             $data['view'] = 'layout/restricted';
 		    $this->load->view('layout/layout', $data);   

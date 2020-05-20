@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 
 		<?php if(isset($msg) || validation_errors() !== ''): ?>
-		<div class="alerts alert-danger alert-dismissible">
+		<div class="alert alert-danger alert-dismissible">
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 			<h4><i class="fa fa-exclamation"></i> Terjadi Kesalahan</h4>
 			<?= validation_errors();?>
@@ -20,33 +20,57 @@
 				<div class="form-group">
 					<label for="username" class="control-label">Username</label>
 					<div class="">
-						<input type="text" name="username" class="form-control" id="username" placeholder="" value="<?php if(validation_errors()) {echo set_value('username');  }  ?>">
+						<input type="text" name="username" class="form-control <?= (form_error('username')) ? 'is-invalid' : ''; ?>" id="username" placeholder="" value="<?php if(validation_errors()) {echo set_value('username');  }  ?>" >
+						<span class="text-danger"><?php echo form_error('username'); ?></span>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="email" class="control-label">Email</label>
 					<div>
-						<input type="email" name="email" class="form-control" id="email" placeholder="" value="<?php if(validation_errors()) {echo set_value('email');  }  ?>">
+						<input type="email" name="email" class="form-control <?= (form_error('email')) ? 'is-invalid' : ''; ?>" id="email" placeholder="" value="<?php if(validation_errors()) {echo set_value('email');  }  ?>" >
+						<span class="text-danger"><?php echo form_error('email'); ?></span>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="password" class="control-label">Password</label>
 					<div>
-						<input type="password" name="password" class="form-control" id="password" placeholder="">
+						<input type="password" name="password" class="form-control <?= (form_error('password')) ? 'is-invalid' : ''; ?>" id="password" >
+						<span class="text-danger"><?php echo form_error('password'); ?></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nama" class="control-label">Nama Lengkap</label>
+					<div class="">
+						<input type="text" name="nama" class="form-control <?= (form_error('nama')) ? 'is-invalid' : ''; ?>" id="nama" placeholder="" value="<?php if(validation_errors()) {echo set_value('nama');  }  ?>" >
+						<span class="text-danger"><?php echo form_error('nama'); ?></span>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="role" class="control-label">Role</label>
 					<div>
-						<select name="role" class="form-control">
-							<option value="">Pilih Role  <?php !form_error('role') ? $val = set_value('role'): $val='' ; ?></option>
+						<select name="role" class="form-control <?= (form_error('role')) ? 'is-invalid' : ''; ?>">
+							<option value="">Pilih Role</option>
 							<?php foreach($role as $row) { ?>
-							<option value="<?=$row['id']; ?>" <?php echo ($val == $row['id'] ) ? "selected=true": ""; ?>><?=$row['role']; ?></option>
+							<option value="<?=$row['id']; ?>" <?= (set_select('role', $row['id']))?>><?=$row['role']; ?></option>
 							<?php } ?>
 						</select>
+						<span class="text-danger"><?php echo form_error('role'); ?></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="id_prodi" class="control-label">Program Studi</label>
+					<div>
+						<select name="id_prodi" class="form-control <?= (form_error('id_prodi')) ? 'is-invalid' : ''; ?>">
+							<option value="">Pilih Program Studi </option>
+							<?php foreach($prodi as $row) { ?>
+							<option value="<?=$row['id']; ?>" <?= (set_select('id_prodi', $row['id']))?>><?=$row['prodi']; ?></option>
+							<?php } ?>
+						</select>
+						<span class="text-danger"><?php echo form_error('id_prodi'); ?></span>
 					</div>
 				</div>
 

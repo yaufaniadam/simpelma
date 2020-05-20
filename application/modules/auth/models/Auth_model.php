@@ -2,7 +2,7 @@
 	class Auth_model extends CI_Model{
 
 		public function login($data){
-			$query = $this->db->get_where('users', array('username' => $data['username']));
+			$query = $this->db->select('*, id_prodi')->from('users')->join('profil','profil.id_user = users.id','left')->where(array('username' => $data['username']))->get();
 			if ($query->num_rows() == 0){
 				return false;
 			}

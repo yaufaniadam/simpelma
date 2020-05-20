@@ -3,148 +3,155 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-  <title><?=(isset($title)) ? $title : 'SIMPELMA PPs UMY'; ?></title>
+	<title><?= (isset($title)) ? $title : 'SIMPELMA PPs UMY'; ?></title>
 
-  <!-- Custom fonts for this template-->
-  <link href="<?= base_url() ?>public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+	<!-- Custom fonts for this template-->
+	<link href="<?= base_url() ?>public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-  <!-- Custom styles for this template-->
-  <link href="<?= base_url() ?>public/dist/css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="<?= base_url() ?>public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <link href="<?= base_url() ?>public/vendor/danielupload/dist/css/jquery.dm-uploader.min.css" rel="stylesheet">
-  <link href="<?= base_url() ?>public/vendor/danielupload/demo/styles.css" rel="stylesheet">
+	<!-- Custom styles for this template-->
+	<link href="<?= base_url() ?>public/dist/css/sb-admin-2.min.css" rel="stylesheet">
+	<link href="<?= base_url() ?>public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<link href="<?= base_url() ?>public/vendor/danielupload/dist/css/jquery.dm-uploader.min.css" rel="stylesheet">
+	<link href="<?= base_url() ?>public/vendor/danielupload/demo/styles.css" rel="stylesheet">
+	<link href="<?= base_url() ?>/public/vendor/summernote/summernote-bs4.min.css" rel="stylesheet">
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="<?= base_url() ?>public/vendor/jquery/jquery.min.js"></script>
+	<script src="<?= base_url() ?>public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="<?= base_url() ?>public/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="<?= base_url() ?>public/dist/js/sb-admin-2.min.js"></script>
+
+
 </head>
 
 <body id="page-top">
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
 
-  	<?php
-		if($this->session->userdata('role')==1) {
-			include('include/admin_sidebar.php'); 
-		}else {
-			include('include/mahasiswa_sidebar.php'); 
+		<?php
+		if ($this->session->userdata('role') == 1) {
+			include('include/admin_sidebar.php');
+		} else {
+			include('include/mahasiswa_sidebar.php');
 		}
-	?>
+		?>
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
 
-      <!-- Main Content -->
-      <div id="content">
+			<!-- Main Content -->
+			<div id="content">
 
-	  	<?php include('include/navbar.php'); ?>
+				<?php include('include/navbar.php'); ?>
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
 
-			  <?php $this->load->view($view);?>
-         
-        </div>
-        <!-- /.container-fluid -->
+					<?php $this->load->view($view); ?>
 
-      </div>
-      <!-- End of Main Content -->
+				</div>
+				<!-- /.container-fluid -->
 
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-			<span>Copyright &copy; 2020 <a href="http://pascasarjana.umy.ac.id">Program Pascasarjan UMY</a>. 
-			All rights reserved.</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
+			</div>
+			<!-- End of Main Content -->
 
-    </div>
-    <!-- End of Content Wrapper -->
+			<!-- Footer -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright &copy; 2020 <a href="http://pascasarjana.umy.ac.id">Program Pascasarjan UMY</a>.
+							All rights reserved.</span>
+					</div>
+				</div>
+			</footer>
+			<!-- End of Footer -->
 
-  </div>
-  <!-- End of Page Wrapper -->
+		</div>
+		<!-- End of Content Wrapper -->
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+	</div>
+	<!-- End of Page Wrapper -->
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="<?= site_url('auth/logout'); ?>">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top">
+		<i class="fas fa-angle-up"></i>
+	</a>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="<?= base_url() ?>public/vendor/jquery/jquery.min.js"></script>
-  <script src="<?= base_url() ?>public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="<?= base_url() ?>public/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="<?= base_url() ?>public/dist/js/sb-admin-2.min.js"></script>
-
-  <!-- DataTables -->
-<script src="<?= base_url() ?>/public/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<script type="text/javascript">
-	$('#confirm-delete').on('show.bs.modal', function (e) {
-		$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-	});
-
-</script>
-
-<!-- page script -->
-<script>
-
-	$(function () {
-		$("#datatable").DataTable();
-  });
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="<?= site_url('auth/logout'); ?>">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
-  // menu sidebar
-  if($("#menu_<?=$this->router->fetch_class(); ?>").hasClass('has_child')) {    
-    $("#menu_<?=$this->router->fetch_class(); ?>").addClass('active');
-    $("#sub_<?=$this->router->fetch_class(); ?>").addClass('show');
-    $("#sub_<?=$this->router->fetch_class(); ?> div .<?=$this->router->fetch_method(); ?>").addClass('active');
-  } else {    
-    $("#menu_<?=$this->router->fetch_class(); ?>").addClass('active');
-  }
+	<script type="text/javascript">
+		$('#confirm-delete').on('show.bs.modal', function(e) {
+			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+		});
+	</script>
 
-  window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
-    });
-  }, 1000);
-</script>
+	<!-- page script -->
+	<script>
+		
 
+		// menu sidebar
+		if ($("#menu_<?= $this->router->fetch_class(); ?>").hasClass('has_child')) {
+			$("#menu_<?= $this->router->fetch_class(); ?>").addClass('active');
+			$("#sub_<?= $this->router->fetch_class(); ?>").addClass('show');
+			$("#sub_<?= $this->router->fetch_class(); ?> div .<?= $this->router->fetch_method(); ?>").addClass('active');
+		} else {
+			$("#menu_<?= $this->router->fetch_class(); ?>").addClass('active');
+		}
 
-<script src="<?= base_url() ?>/public/vendor/danielupload/dist/js/jquery.dm-uploader.min.js"></script>
-<script src="<?= base_url() ?>/public/vendor/danielupload/demo/demo-ui.js"></script>
+		window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(1000, function() {
+				$(this).remove();
+			});
+		}, 1000);
+	</script>
 
-    
+	<script src="<?= base_url() ?>/public/vendor/summernote/summernote-bs4.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#summernote').summernote({
+				tabsize: 2,
+				height: 320,
+				toolbar: [
+					['style', ['style']],
+					['font', ['bold', 'underline', 'clear']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['table', ['table']],
+					['view', ['fullscreen', 'codeview', 'help']]
+				]
+			});
+		});
+	</script>
 
 </body>
 

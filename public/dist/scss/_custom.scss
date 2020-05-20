@@ -9,4 +9,52 @@
 .bg-white-op-9 {
     background:$white-op-9;
 }
-    
+
+figure.upload-dokumen {
+    height:300px; 
+    background-color:rgb(241, 241, 241);
+    outline: 3px dashed rgb(202, 202, 202);
+}
+
+figure.preview-dokumen {
+    height:200px;
+    background-color:rgb(241, 241, 241);
+    outline: 3px dashed rgb(202, 202, 202);
+    background-size: contain;
+    padding:20px;
+}
+
+
+figure.is-invalid {
+   outline: 3px dashed rgb(197, 88, 88);
+}
+
+.list-group-item.is-eror{
+    border-color:  rgb(197, 88, 88);
+}
+
+.summernote-is-invalid .note-editor.note-airframe, .summernote-is-invalid .note-editor.note-frame {
+    border: 1px solid rgb(197, 88, 88);
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #4b9468;
+    border-color: #629e7a;
+}
+
+
+/*surat */
+table.tb-surat td .judul {
+    color:#4e4e4e;
+    font-weight: 700;
+}
+/*surat */
+table.tb-surat tr.proses td{
+    background:#ebebeb;
+}
+/*surat */
+table.tb-surat tr.proses td .judul {
+    font-weight: normal;
+}

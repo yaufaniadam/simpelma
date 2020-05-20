@@ -17,6 +17,7 @@ class Surat extends Admin_Controller
 	}
 	public function detail($id_surat=0)
 	{				
+		$data['status'] = $this->surat_model->get_surat_status($id_surat);
 		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
 		$data['title'] = 'Detail Surat';
 		$data['view'] = 'surat/detail';

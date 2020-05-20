@@ -10,7 +10,7 @@
 			if(!$this->session->has_userdata('is_login')) {		
 				redirect ('auth/login');
 			} else {
-				if(!$this->session->has_userdata('role')==1) {	
+				if($this->session->has_userdata('role') == 3) {	
 					redirect ('mahasiswa/surat');
 				} else {
 					redirect ('admin/surat');
@@ -32,22 +32,22 @@
 					'password' => $this->input->post('password')
 					);
 					$result = $this->auth_model->login($data);
-					if($result){					
-				    	
+					if($result){	
+						echo $result['id_prodi'];
 						$user_data = array(
 							'user_id' => $result['id'],
 							'username' => $result['username'],
 							'role' => $result['role'],
 							'is_login' => TRUE,
-										
+							'id_prodi' => $result['id_prodi']										
 						);
 
 						$this->session->set_userdata($user_data);
 							
-						if($this->session->userdata('role')==1) {
-							redirect(base_url('admin/surat'), 'refresh'); 
-						}else {
+						if($this->session->userdata('role') == 3) {
 							redirect(base_url('mahasiswa/surat'), 'refresh');
+						}else {
+							redirect(base_url('admin/surat'), 'refresh');
 						}					
 					}
 

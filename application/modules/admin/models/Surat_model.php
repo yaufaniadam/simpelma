@@ -3,22 +3,23 @@ class Surat_model extends CI_Model
 {
     public function get_surat()
     {
-        $query = $this->db->query("SELECT ss.id, ss.id_surat,ss.id_status, st.status, s.id_kategori_surat, k.kategori_surat, s.id_mahasiswa, p.nama FROM surat_status ss
-        LEFT JOIN surat s ON s.id = ss.id_surat
-        LEFT JOIN kategori_surat k ON k.id = s.id_kategori_surat
+             
+        $query = $this->db->query("SELECT s.id as id_surat, s.id_mahasiswa, p.nama, ss.id_status, k.kategori_surat, st.status, DATE_FORMAT(ss.date, '%d %M') as date,  DATE_FORMAT(ss.date, '%H:%i') as time,  DATE_FORMAT(ss.date, '%d %M %Y') as date_full
+        FROM surat s
         LEFT JOIN profil p ON p.id_user = s.id_mahasiswa
-        LEFT JOIN keterangan_surat ks ON ks.id_surat = s.id
-      
+        LEFT JOIN surat_status ss ON ss.id_surat = s.id
         LEFT JOIN status st ON st.id = ss.id_status
-        WHERE ss.id in (SELECT max(ss.id) FROM surat_status ss  GROUP BY ss.id_surat)
-        AND ss.id_status != 4
-        ORDER BY s.id DESC");        
+        LEFT JOIN kategori_surat k ON k.id = s.id_kategori_surat       
+        WHERE ss.id_status = (SELECT MAX(id_status) FROM surat_status WHERE id_surat=s.id)
+        AND ss.id_status != 1
+         ORDER BY s.id DESC      
+        ");        
         return $result = $query->result_array();
     }
    
     public function get_detail_surat($id_surat)
     { 
-        $query = $this->db->query("SELECT s.id, k.kategori_surat, k.klien, ss.id_status, p.nama,p.nim FROM surat s
+        $query = $this->db->query("SELECT s.id, k.kategori_surat, k.klien, ss.id_status, st.status, p.nama,p.nim,  k.kat_keterangan_surat FROM surat s
         LEFT JOIN profil p ON p.id_user = s.id_mahasiswa        
         LEFT JOIN surat_status ss ON ss.id_surat = s.id        
         LEFT JOIN status st ON st.id = ss.id_status
@@ -31,8 +32,30 @@ class Surat_model extends CI_Model
         $query = $this->db->query("SELECT * FROM kategori_surat");
         return $result = $query->result_array();
     }
+    public function get_kategori_surat_byid($id)
+    {
+        $query = $this->db->query("SELECT * FROM kategori_surat where id='$id'");
+        return $result = $query->row_array();
+    }
+    public function edit_kategori_surat($data, $id)
+    {
+        return $this->db->update('kategori_surat', $data, array('id'=>$id));
+    }
     public function tambah($data)
     {
         return $this->db->insert('surat', $data);
+    }
+
+    public function get_surat_status($id_surat)
+    {
+        return $this->db->select('ss.*, DATE_FORMAT(ss.date,"%d %M %Y") as date, st.status')
+            ->from('surat_status ss')
+            ->join('status st','ss.id_status=st.id','left')
+            ->where(array('ss.id_surat'=>$id_surat,'ss.id_status !='=>'0','ss.id_status !='=>'1'))->get()->result_array();
+    }
+
+    //class Kategori
+    public function get_kat_keterangan_surat() {
+        return $this->db->get('kat_keterangan_surat')->result_array();
     }
 }

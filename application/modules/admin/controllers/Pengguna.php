@@ -6,6 +6,7 @@ class Pengguna extends Admin_Controller
 	{
 		parent::__construct();
 		$this->load->model('pengguna_model', 'pengguna_model');	
+		$this->load->model('prodi_model', 'prodi_model');
 		$this->load->library('datatable'); 
 		$this->load->library('excel');	
 	}
@@ -22,13 +23,18 @@ class Pengguna extends Admin_Controller
 	public function tambah()
 	{
 		if ($this->input->post('submit')) {
-			$this->form_validation->set_rules('username', 'Username', 'trim|required');
-			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
-			$this->form_validation->set_rules('role', 'Role', 'trim|required');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required');
+			$this->form_validation->set_rules('username', 'Username', 'trim|required|is_unique[users.username]',
+				array('required'=>'%s wajib diisi', 'is_unique'=>'%s tidak tersedia, gunakan yang lain.'));
+			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required|is_unique[users.email]',
+				array('required'=>'%s wajib diisi','valid_email'=>'Format %s salah',  'is_unique'=>'%s tidak tersedia, gunakan yang lain.'));	
+			$this->form_validation->set_rules('role', 'Role', 'trim|required', array('required'=>'%s wajib diisi'));	
+			$this->form_validation->set_rules('password', 'Password', 'trim|required', array('required'=>'%s wajib diisi'));
+			$this->form_validation->set_rules('id_prodi', 'Program Studi', 'required',array('required'=>'%s wajib diisi'));	
+			$this->form_validation->set_rules('nama', 'Nama Lengkap', 'trim|required', array('required'=>'%s wajib diisi'));
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['role'] = $this->pengguna_model->role();
+				$data['prodi'] = $this->prodi_model->get_prodi();
 				$data['title'] = 'Tambah Pengguna'; 
 				$data['view'] = 'admin/pengguna/tambah';
 				$this->load->view('layout/layout', $data);
@@ -46,23 +52,31 @@ class Pengguna extends Admin_Controller
 				$data = $this->security->xss_clean($data);
 				$result = $this->pengguna_model->add_user($data);
 				if ($result) {
+					$profil= array(
+						'id_user' => $this->db->insert_id(),
+						'nama' => $this->input->post('nama'),
+						'id_prodi' => $this->input->post('id_prodi')
+					);
+					$this->db->set($profil)->insert('profil');
 					$this->session->set_flashdata('msg', 'Pengguna berhasil ditambahkan!');
 					redirect(base_url('admin/pengguna'));
 				}
 			}
 		} else {
 			$data['role'] = $this->pengguna_model->role();
+			$data['prodi'] = $this->prodi_model->get_prodi();
 			$data['title'] = 'Tambah Pengguna';
 			$data['view'] = 'admin/pengguna/tambah';
 			$this->load->view('layout/layout', $data);
 		}
 	}
 
+
+
 	public function edit($id = 0)
 	{
 		if ($this->input->post('submit')) {
-			$this->form_validation->set_rules('username', 'Username', 'trim|required');
-		//	$this->form_validation->set_rules('firstname', 'Nama Lengkap', 'trim|required');
+		
 			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
 		//	$this->form_validation->set_rules('mobile_no', 'Number', 'trim|required');
 
@@ -71,17 +85,11 @@ class Pengguna extends Admin_Controller
 				$data['title'] = 'Edit Pengguna';
 				$data['view'] = 'admin/pengguna/edit';
 				$this->load->view('layout/layout', $data);
-			} else {
-
-				
+			} else {				
 				$data = array(
-					'username' => $this->input->post('username'),
-				//	'firstname' => $this->input->post('firstname'),
 					'email' => $this->input->post('email'),
-				//	'mobile_no' => $this->input->post('mobile_no'),
 					'password' => ($this->input->post('password') !== "" ? password_hash($this->input->post('password'), PASSWORD_BCRYPT) : $this->input->post('password_hidden')),
 					'updated_at' => date('Y-m-d : h:m:s'),
-				//	'photo' => ($foto_profil['file_name']) !== "" ? $upload_path . '/' . $foto_profil['file_name'] : $this->input->post('foto_profil_hidden'),
 				);
 
 				$data = $this->security->xss_clean($data);

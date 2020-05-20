@@ -36,12 +36,12 @@
 		<div class="card card-success card-outline">
 			<div class="card-body box-profile">
 
-				<?php echo form_open_multipart(base_url('admin/mahasiswa/edit/'.$user['id']), 'class="form-horizontal"');  ?>
+				<?php echo form_open_multipart(base_url('admin/pengguna/edit/'.$user['id']), 'class="form-horizontal"');  ?>
 
 				<div class="form-group">
 					<label for="username" class="control-label">Username</label>
 					<div class="">
-						<input type="text" value="<?=$user['username']; ?>" name="username" class="form-control" id="username"
+						<input type="text" value="<?=$user['username']; ?>"  class="form-control" disabled id="username"
 							placeholder="">
 
 					</div>

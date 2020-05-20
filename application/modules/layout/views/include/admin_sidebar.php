@@ -31,6 +31,13 @@
 	</div>
 -->
 
+
+	<!-- Divider -->
+	<hr class="sidebar-divider d-none d-md-block">
+	<div class="sidebar-heading">
+        Pengaturan
+	  </div>
+	
 	<li class="nav-item has_child" id="menu_pengguna">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#sub_pengguna" aria-expanded="true"
 			aria-controls="sub_pengguna">
@@ -41,26 +48,21 @@
 			<div class="bg-white-op-9 py-2 collapse-inner rounded">
 				<!-- beri nama class yg sama dgn method/functionnya -->
 				<a class="collapse-item index" href="<?=base_url("admin/pengguna"); ?>">Semua Pengguna</a>
-				<a class="collapse-item add" href="<?=base_url("admin/pengguna/tambah"); ?>">Tambah Pengguna</a>
-				<a class="collapse-item upload" href="<?=base_url("admin/pengguna/upload"); ?>">Upload
-					Pengguna</a>
+				<a class="collapse-item tambah" href="<?=base_url("admin/pengguna/tambah"); ?>">Tambah Pengguna</a>
+				<a class="collapse-item upload" href="<?=base_url("admin/pengguna/upload"); ?>">Upload Pengguna</a>
 			</div>
 		</div>
 	</li>
+	<li class="nav-item" id="menu_prodi">
+		<a class="nav-link" href="<?=base_url("admin/prodi"); ?>">
+			<i class="fas fa-fw fa-graduation-cap"></i>
+			<span>Program Studi</span></span></a>
+	</li>
 
-	<li class="nav-item has_child" id="menu_pengaturan">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#sub_pengaturan" aria-expanded="true"
-			aria-controls="sub_pengaturan">
-			<i class="fas fa-fw fa-tools"></i>
-			<span>Pengaturan</span>
-		</a>
-		<div id="sub_pengaturan" class="collapse" aria-labelledby="heading_pengaturan" data-parent="#accordionSidebar">
-			<div class="bg-white-op-9 py-2 collapse-inner rounded">
-				<!-- beri nama class yg sama dgn method/functionnya -->
-				<a class="collapse-item kategori_surat" href="<?=base_url("admin/kategori_surat"); ?>">Kategori Surat</a>
-			
-			</div>
-		</div>
+	<li class="nav-item" id="menu_kategorisurat">
+		<a class="nav-link" href="<?=base_url("admin/kategorisurat"); ?>">
+			<i class="fas fa-fw fa-list"></i>
+			<span>Kategori Surat</span></span></a>
 	</li>
 
 	<!-- Divider -->
