@@ -9,43 +9,45 @@
 			</div>
 		<?php endif; ?>
 		<?php
-			if ($query) {  ?>
-		<table id="datatablse" class="table table-bordered">
-			<tbody>
-				<?php 
-				echo "<pre>";
-				print_r($query);
-				echo "</pre>";
-				
-				/*
-				foreach ($query as $surat) { 
-					 ?>
-					<tr>
-						<td><a href="<?=base_url('mahasiswa/surat/detail/'.$surat['id']); ?>"><?=$surat['kategori_surat']; ?></a> <?=($surat['id_status'] == 2) ? '<span class="badge badge-danger">Baru</span>' : ''; ?></td>
-						
-						<td><?php if( $surat['id_status'] == 1) { ?> 
-							<?= $surat['status']; ?> <a class="btn btn-warning btn-sm" href="<?= base_url('mahasiswa/surat/tambah/'.$surat['id']); ?>">Lengkapi</a>
+		if ($query) {  ?>
+			<table id="datatablse" class="table tb-surat table-bordered">
+				<tbody>
+					<thead>
+						<tr>
+							<th>Perihal</th>
+							
+							<th style="width:200px;">Tanggal</th>
+						</tr>
+					</thead>
+					<?php
+					// echo "<pre>";
+					// print_r($query);
+					// echo "</pre>";
 
-							<a href="" style="color:#fff;" title="Hapus"
-									class="delete btn btn-sm  btn-circle btn-danger"
-									data-href="<?= base_url('mahasiswa/surat/hapus/' . $surat['id']); ?>"
-									data-toggle="modal" data-target="#confirm-delete"> <i
-										class="fa fa-trash-alt"></i></a>
-						<?php } else {
-							echo $surat['status'];
-						} ?>
-						
-						</td>
-					</tr>
-					<?php }  */ ?>
-			</tbody>
-			</tfoot>
-		</table>
+
+					foreach ($query as $surat) {
+					?>
+						<tr class="<?= ($surat['id_status'] == 2 ) ? 'proses' : ""; ?> <?= ($surat['id_status'] == '4') ? "perlu-revisi": ""; ?>">
+							<td><a class="judul" href="<?= base_url('mahasiswa/surat/tambah/' . $surat['id_surat']); ?>"><?= $surat['kategori_surat']; ?></a>
+								<?php echo badge_status($surat['id_status']); ?>
+								<br />
+								<?= ($surat['id_status'] == '4') ? "<span class='badge badge-". $surat['badge'] ."'><i class='fas fa-exclamation-triangle'></i> Dokumen persyaratan perlu diperbaiki</span>" : ""; ?>
+							</td>
+							
+							<td>
+								<p class="m-0"><?= $surat['date_full'];	?></p>
+								<p class="badge m-0 badge-warning"><?= $surat['time']; ?></p>
+							</td>
+						</tr>
+					<?php }   ?>
+				</tbody>
+				</tfoot>
+			</table>
 		<?php } else { ?>
 
 			<p class="lead">Belum ada Surat</p>
-			
-		<?php } ?>			
+
+		<?php } ?>
 	</div>
 	<!-- /.col -->
 </div>

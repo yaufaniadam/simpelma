@@ -3,19 +3,7 @@ class Surat_model extends CI_Model
 {
     public function get_surat_bymahasiswa($id_mhs)
     {
-      //  $query = $this->db->select('s.*, k.kategori_surat, ss.id_status, st.status')
-        // $query = $this->db->select('s.*')
-        //         ->from('surat s')
-        //         ->join('surat_status ss','ss.id_surat = s.id','inner')
-        //         // ->join('kategori_surat k','k.id = s.id_kategori_surat','left')
-        //         // ->join('status st','st.id = ss.id_status','left')
-        //         ->where('id_mahasiswa',$id_mhs)
-        //         ->where('s.id',('SELECT max(ss2.id) FROM surat_status ss2 WHERE ss2.id_surat = s.id GROUP BY ss2.id_surat'))
-        //         ->get();
-        
-        // return $result = $query->result_array();
-
-        $query = $this->db->query("SELECT s.id as id_surat, ss.id_status, k.kategori_surat, st.status
+        $query = $this->db->query("SELECT s.id as id_surat, ss.id_status, k.kategori_surat, st.status, st.badge, DATE_FORMAT(ss.date, '%d %M') as date,  DATE_FORMAT(ss.date, '%H:%i') as time,  DATE_FORMAT(ss.date, '%d %M %Y') as date_full
         FROM surat s
         LEFT JOIN surat_status ss ON ss.id_surat = s.id
         LEFT JOIN status st ON st.id = ss.id_status
@@ -27,7 +15,7 @@ class Surat_model extends CI_Model
     }
     public function get_detail_surat($id_surat)
     {
-        $query = $this->db->query("SELECT s.id, s.id_kategori_surat, k.kategori_surat, k.kat_keterangan_surat, k.klien, ss.id_status, p.nama,p.nim FROM surat s
+        $query = $this->db->query("SELECT s.id, s.id_kategori_surat, k.kategori_surat, k.kat_keterangan_surat, k.klien, ss.id_status, st.status, st.badge, p.nama,p.nim, p.photo FROM surat s
         LEFT JOIN profil p ON p.id_user = s.id_mahasiswa        
         LEFT JOIN surat_status ss ON ss.id_surat = s.id        
         LEFT JOIN status st ON st.id = ss.id_status

@@ -41,10 +41,10 @@
 	<div id="wrapper">
 
 		<?php
-		if ($this->session->userdata('role') == 1) {
-			include('include/admin_sidebar.php');
-		} else {
+		if ($this->session->userdata('role') == 3) {			
 			include('include/mahasiswa_sidebar.php');
+		} else {
+			include('include/admin_sidebar.php');
 		}
 		?>
 
@@ -117,8 +117,6 @@
 
 	<!-- page script -->
 	<script>
-		
-
 		// menu sidebar
 		if ($("#menu_<?= $this->router->fetch_class(); ?>").hasClass('has_child')) {
 			$("#menu_<?= $this->router->fetch_class(); ?>").addClass('active');
@@ -129,7 +127,7 @@
 		}
 
 		window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(1000, function() {
+			$(".alert-dismissible").fadeTo(500, 0).slideUp(1000, function() {
 				$(this).remove();
 			});
 		}, 1000);
@@ -151,6 +149,10 @@
 				]
 			});
 		});
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip()
+		})
 	</script>
 
 </body>

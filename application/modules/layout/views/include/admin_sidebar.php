@@ -22,15 +22,10 @@
 	<li class="nav-item" id="menu_surat">
 		<a class="nav-link" href="<?=base_url("admin/surat"); ?>">
 			<i class="fas fa-fw fa-envelope"></i>
-			<span>Surat</span><?=(countSurat(1) > 0 ) ? '<span class="float-right badge badge-warning">'. countSurat(1).'</a>' : ''; ?></span></a>
+			<span>Surat</span><?=(countSurat() > 0 ) ? '<span class="float-right badge badge-warning">'. countSurat(1).'</a>' : ''; ?></span></a>
 	</li>
 
-	<!-- Heading 
-	<div class="sidebar-heading">
-		Administrator
-	</div>
--->
-
+	<?php if($this->session->userdata('role') == 1) { ?>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">
@@ -64,6 +59,8 @@
 			<i class="fas fa-fw fa-list"></i>
 			<span>Kategori Surat</span></span></a>
 	</li>
+
+	<?php } // ednif role = 1?>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">

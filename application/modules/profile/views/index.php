@@ -1,13 +1,13 @@
 <div class="row">
 	<div class="col-md-12">
 
-		<?php if(isset($msg) || validation_errors() !== ''): ?>
-		<div class="alert alert-danger alert-dismissible">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-			<h4><i class="fa fa-exclamation"></i> Terjadi Kesalahan</h4>
-			<?= validation_errors();?>
-			<?= isset($msg)? $msg: ''; ?>
-		</div>
+		<?php if (isset($msg) || validation_errors() !== '') : ?>
+			<div class="alert alert-danger alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				<h4><i class="fa fa-exclamation"></i> Terjadi Kesalahan</h4>
+				<?= validation_errors(); ?>
+				<?= isset($msg) ? $msg : ''; ?>
+			</div>
 		<?php endif; ?>
 
 	</div>
@@ -15,14 +15,13 @@
 	<div class="col-md-2">
 		<div class="card card-success card-outline">
 			<div class="card-body box-profile">
-				<?php if($user['photo'] == '' ) { ?>
+				<?php if ($user['photo'] == '') { ?>
 
-				<img class="profile-user-img img-fluid img-circle" src="<?=base_url(); ?>public/dist/img/nophoto.png"
-					alt="User profile picture">
+					<img class="profile-user-img img-fluid img-circle" src="<?= base_url(); ?>public/dist/img/nophoto.png" alt="User profile picture">
 
 				<?php } else { ?>
 
-				<img class="profile-user-img img-fluid img-circle" src="<?=base_url($user['photo'] ); ?>">
+					<img class="profile-user-img img-fluid img-circle" src="<?= base_url($user['photo']); ?>">
 
 				<?php } ?>
 			</div>
@@ -38,23 +37,25 @@
 				<div class="form-group">
 					<label for="username" class="control-label">Username</label>
 					<div class="">
-						<input type="text" value="<?=$user['username']; ?>" class="form-control" disabled>
+						<input type="text" value="<?= $user['username']; ?>" class="form-control" disabled>
 					</div>
 				</div>
 
 				<!--  <div class="form-group">
                     <label for="firstname" class="control-label">Nama Lengkap</label>
                     <div>
-                      <input type="text"  value="<?=$user['firstname']; ?>" name="firstname" class="form-control" id="firstname" placeholder="">
+                      <input type="text"  value="<?= $user['firstname']; ?>" name="firstname" class="form-control" id="firstname" placeholder="">
                     </div>
                   </div>-->
 
 				<div class="form-group">
 					<label for="email" class="control-label">Email</label>
 					<div>
-						<input type="email"
-							value="<?php if(validation_errors()) {echo set_value('email'); } else { echo $user['email']; }  ?>"
-							name="email" class="form-control" id="email" placeholder="">
+						<input type="email" value="<?php if (validation_errors()) {
+														echo set_value('email');
+													} else {
+														echo $user['email'];
+													}  ?>" name="email" class="form-control" id="email" placeholder="">
 					</div>
 				</div>
 
@@ -78,8 +79,9 @@
 						<input type="submit" name="submit" value="Ubah Profil Saya" class="btn btn-info">
 					</div>
 				</div>
-				<?php echo form_close( ); ?>
+				<?php echo form_close(); ?>
 
 			</div>
 		</div>
 	</div>
+</div>

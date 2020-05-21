@@ -76,12 +76,15 @@ class Surat extends MY_Controller
 
 	public function tambah($id_surat = 0)
 	{
-	
-		if ($this->input->post('submit')) {	
+
+		if ($this->input->post('submit')) {
 
 			foreach ($this->input->post('dokumen') as $id => $dokumen) {
-				$this->form_validation->set_rules('dokumen['.$id.']', kat_keterangan_surat($id)['kat_keterangan_surat'] , 'trim|required',
-					array('required' => '%s wajib diisi.')		
+				$this->form_validation->set_rules(
+					'dokumen[' . $id . ']',
+					kat_keterangan_surat($id)['kat_keterangan_surat'],
+					'trim|required',
+					array('required' => '%s wajib diisi.')
 				);
 			}
 
@@ -92,9 +95,24 @@ class Surat extends MY_Controller
 				$data['title'] = 'Ajukan Surat';
 				$data['view'] = 'surat/tambah';
 				$this->load->view('layout/layout', $data);
-			} else { 
+			} else {
 
-				//insert field ke tabel keterangan_surat
+				//cek dulu apakah ini surat baru atau surat revisi
+				if ($this->input->post('revisi')) {
+					$id_status = 5;
+				} else {
+					$id_status = 2;
+				}
+
+				//tambah status ke tb surat_status
+				$insert = $this->db->set('id_surat', $id_surat)
+					->set('id_status', $id_status) //baru
+					->set('date', 'NOW()', FALSE)
+					->insert('surat_status');
+			}
+
+			//insert field ke tabel keterangan_surat
+			if ($insert) {
 				foreach ($this->input->post('dokumen') as $id => $dokumen) {
 					$this->db->where(array('id_kat_keterangan_surat' => $id, 'id_surat' => $id_surat));
 					$this->db->update(
@@ -104,14 +122,8 @@ class Surat extends MY_Controller
 						)
 					);
 				}
-				//tambah status ke tb surat_status
-				$this->db->set('id_surat', $id_surat)
-					->set('id_status', 2) //baru
-					->set('date', 'NOW()', FALSE)
-					->insert('surat_status');
-					}
-
-			
+			}
+			redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
 		} else {
 			$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
 			$data['keterangan_surat'] = $this->surat_model->get_keterangan_surat($id_surat);

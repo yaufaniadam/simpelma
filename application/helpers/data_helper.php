@@ -1,13 +1,20 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 
-// -----------------------------------------------------------------------------
-function getUserbyId($id)
-{
-	$CI = &get_instance();
-	return $CI->db->get_where('profil', array('id_user' => $id))->row_array()['nama'];
+// print_r tool
+
+function printrs($var) {
+	echo "<pre>";
+	print_r($var); 
+	echo "</pre>";
 }
 
+// -----------------------------------------------------------------------------
+function getUserbyId()
+{
+	$CI = &get_instance();
+	return  $CI->db->select('*')->from('profil')->where(array('id_user' => $CI->session->userdata("user_id")))->get()->row_array();
+}
 
 function indonesian_date($timestamp = '', $date_format = 'j F Y', $suffix = 'WIB')
 {
@@ -43,7 +50,6 @@ function indonesian_date($timestamp = '', $date_format = 'j F Y', $suffix = 'WIB
 
 function getUserPhoto($id)
 {
-
 	$CI = &get_instance();
 	return $CI->db->get_where('profil', array('id_user' => $id))->row_array()['photo'];
 }
@@ -59,12 +65,20 @@ function transposeData($data)
 	return $retData;
 }
 
-function countSurat($status)
+function countSurat()
 {
-	$CI = &get_instance();
+	$CI = &get_instance();	
+	if($CI->session->userdata('role') == 1) {
+		$prodi ='';
+	} else {            
+		$prodi = "AND p.id_prodi = '" . $CI->session->userdata('id_prodi') ."'";
+	}
 	$query = $CI->db->query("SELECT COUNT(*) as JUMLAH
-		FROM surat_status s
-		WHERE s.id_surat NOT IN (SELECT ss.id_surat FROM surat_status ss WHERE ss.id_status='3') AND s.id_status!='1'
+		FROM surat_status ss
+		LEFT JOIN surat s ON s.id = ss.id_surat
+		LEFT JOIN profil p ON p.id_user = s.id_mahasiswa
+		WHERE ss.id_surat NOT IN (SELECT ss2.id_surat FROM surat_status ss2 WHERE ss2.id_status IN (3,4,5)) AND ss.id_status!='1'
+		$prodi
         ");
 	$result = $query->row_array();
 	return $result['JUMLAH'];
@@ -77,10 +91,10 @@ function kat_keterangan_surat($id)
 }
 
 //menampilkan kategori keterangan surat
-function generate_form_field($id, $id_surat)
+function generate_form_field($id, $id_surat, $id_status)
 {
 	$CI = &get_instance();
-	$fields = $CI->db->select('kks.*, ks.value')->from('kat_keterangan_surat kks')
+	$fields = $CI->db->select('kks.*, ks.value, ks.verifikasi')->from('kat_keterangan_surat kks')
 		->join('keterangan_surat ks', 'ks.id_kat_keterangan_surat=kks.id', 'left')
 		->where(array('kks.id' => $id))
 		->where(array('ks.id_surat' => $id_surat))
@@ -95,9 +109,10 @@ function generate_form_field($id, $id_surat)
 			->where(array('id' => $image_id))->get()->row_array();
 		$thumb = $image['thumb'];
 		$image = base_url($thumb);
+
 	?>
 
-		<figure style="background:url('<?= $image; ?>') center center no-repeat" class="d-flex align-items-center justify-content-center upload-dokumen <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?>">
+		<figure style="background:url('<?= $image; ?>') center center no-repeat" class="d-flex align-items-center justify-content-center upload-dokumen <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($fields['verifikasi'] == 0) && ($id_status == 4 ) ) ? 'is-invalid' : ''; ?>">
 			<?php if ($thumb) { ?>
 				<button id="opener-<?= $id; ?>" class="opener hapus btn btn-danger btn-md" type="button"><i class="fas fa-trash"></i> Hapus</button>
 			<?php } else { ?>
@@ -108,9 +123,9 @@ function generate_form_field($id, $id_surat)
 		</figure>
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
-	<?php } elseif ($fields['type'] == 'textarea') { ?>
+	<?php } elseif ($fields['type'] == 'textarea') {  ?>
 
-		<textarea class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"><?= (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $fields['value'];  ?></textarea>
+		<textarea class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($fields['verifikasi'] == 0) && ($id_status == 4) ) ? 'is-invalid' : ''; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"><?= (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $fields['value'];  ?></textarea>
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
 	<?php }
@@ -324,7 +339,7 @@ function fileUploaderModal()
 			$("#" + openerinput).parent("figure").css('background', 'url("' + img + '") center center no-repeat');
 
 			$('#fileUploader').modal('hide');
-			$("#" + value).html('<i class="fas fa-plus"></i> Hapus');
+			$("#" + value).html('<i class="fas fa-trash"></i> Hapus');
 			$("#" + value).addClass('btn-danger hapus').removeClass('btn-info');
 			$("#" + value).removeAttr('data-toggle data-target');
 
@@ -354,32 +369,49 @@ function fileUploaderModal()
 function generate_keterangan_surat($id, $id_surat)
 {
 	$CI = &get_instance();
-	$fields = $CI->db->select('kks.*, ks.value')->from('kat_keterangan_surat kks')
+	$fields = $CI->db->select('kks.*, ks.value, ks.verifikasi')->from('kat_keterangan_surat kks')
 		->join('keterangan_surat ks', 'ks.id_kat_keterangan_surat=kks.id', 'left')
 		->where(array('kks.id' => $id))
 		->where(array('ks.id_surat' => $id_surat))
-		->get()->row_array(); ?>
+		->get()->row_array(); 
 
-	<?php
 	if ($fields['type'] == 'image') {
-
-		$image_id = (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $fields['value'];
-
+	
 		$image = $CI->db->select('*')->from('media')
-			->where(array('id' => $image_id))->get()->row_array();
+			->where(array('id' => $fields['value']))->get()->row_array();
 		$img_full = $image['file'];
 		$thumb = $image['thumb'];
 		$image = base_url($thumb);
 	?>
 
 		<figure style="background:url('<?= $image; ?>') center center no-repeat" class="d-flex align-items-start justify-content-start preview-dokumen">
-			<a data-href="<?= base_url($img_full); ?>" class="opener btn btn-warning btn-md" type="button" data-toggle="modal" data-target="#fileZoom"><i class="fas fa-search-plus"></i></a>
-			
+			<a data-href="<?= base_url($img_full); ?>" class="opener btn btn-warning btn-md" type="button" data-toggle="modal" data-target="#fileZoom" ><i class="fas fa-search-plus" data-toggle="tooltip" data-placement="top" title="Klik untuk memperbesar"></i></a>
 		</figure>
+		<div class="d-inline">
+			<input type="hidden" name="verifikasi[<?= $id; ?>]" value="0" />
+			<label class="switch">
+				<input type="checkbox" class="verifikasi" name="verifikasi[<?= $id; ?>]" value="1"  <?= ( $fields['verifikasi'] == 1) ? 'checked' :'';  ?>  />
+				<span class="slider round"></span>
+			</label>
+			
+		</div>
+		<div class="d-inline">
+			Data sudah sesuai? <a class="help" data-toggle="tooltip" data-placement="right" title="Klik tombol di samping jika data sudah sesuai"><i class="fa fa-info-circle"></i></a>
+		</div>
 
 	<?php } elseif ($fields['type'] == 'textarea') { ?>
 
-		<textarea class="form-control" id="input-<?= $id; ?>" disabled><?= $fields['value'];  ?></textarea>
+		<textarea class="form-control mb-2" id="input-<?= $id; ?>" disabled><?= $fields['value'];  ?></textarea>
+		<div class="d-inline">
+			<input type="hidden" name="verifikasi[<?= $id; ?>]" value="0" />
+			<label class="switch">
+				<input type="checkbox" class="verifikasi" name="verifikasi[<?= $id; ?>]" value="1" <?= ( $fields['verifikasi'] == 1) ? 'checked' :''; ?> />
+				<span class="slider round"></span>
+			</label>
+		</div>
+		<div class="d-inline">
+			Data sudah sesuai? <a class="help" data-toggle="tooltip" data-placement="right" title="Klik tombol di samping jika data sudah sesuai"><i class="fa fa-info-circle"></i></a>
+		</div>
 
 	<?php } ?>
 
@@ -393,11 +425,10 @@ function generate_keterangan_surat($id, $id_surat)
 					</button>
 				</div>
 				<div class="modal-body">
-					<figure class="img_full"></figure>					
+					<figure class="img_full"></figure>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button" data-dismiss="modal">Tutup</button>
-
 				</div>
 			</div>
 		</div>
@@ -410,7 +441,30 @@ function generate_keterangan_surat($id, $id_surat)
 			$('.img_full').empty();
 			$('.img_full').prepend("<img style='width:100%;' src=" + $gbr + " />");
 		});
-		
 	</script>
 
 <?php }
+
+function badge_status($status)
+{
+	$CI = &get_instance();
+	$status  = $CI->db->get_where('status', array('id' => $status))->row_array();
+
+	return '<span class="float-right badge-sm badge badge-' . $status['badge'] . '"> ' . $status['status'] . ' </span>';
+}
+function tgl_status_surat($id_surat, $status)
+{
+	$CI = &get_instance();
+	return  $status  = $CI->db->select("DATE_FORMAT(date,'%d %M %Y') as date, DATE_FORMAT(date,'%H:%i') as time")->from('surat_status')->where(array('id_surat' => $id_surat, 'id_status' => $status))->get()->row_array();
+}
+
+function cek_verifikasi($id_surat)
+{
+	$CI = &get_instance();
+	$verifikasi  = $CI->db->select("verifikasi")->from('keterangan_surat')->where(array('id_surat' => $id_surat))->get()->result_array();
+	if(array_search("0", array_column($verifikasi, 'verifikasi')) !== false ) {
+		return true;
+	} 
+
+	
+}

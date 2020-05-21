@@ -9,7 +9,7 @@
 	<div class="col-12">
 
 		<div class="card card-success card-outline">
-			<div class="card-header">Inbox
+			<div class="card-header">Surat Masuk
 			</div>
 			<div class="card-body">
 				<?php
@@ -19,19 +19,25 @@
 							<tr>
 								<th>Perihal</th>
 								<th>Mahasiswa</th>
-								<th>Date</th>
+								<th>Tanggal</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
 							foreach ($query as $surat) {  ?>
-								<tr class="<?= ($surat['id_status'] == 3) ? 'proses' : ''; ?>">
-									<td><a class="judul" href="<?= base_url('admin/surat/detail/' . $surat['id_surat']); ?>"><?= $surat['kategori_surat']; ?></a> <?= ($surat['id_status'] == 2) ? '<span class="float-right badge-sm badge badge-danger">Baru</span>' : ''; ?></td>
-									<td><?= $surat['nama']; ?></td>
+								<tr class="<?= ($surat['id_status'] == 2) ? 'proses' : ''; ?> <?= ($surat['id_status'] == 4) ? 'perlu-revisi' : ''; ?>">
+									<td><a class="judul" href="<?= base_url('admin/surat/detail/' . $surat['id_surat']); ?>"><?= $surat['kategori_surat']; ?></a> <?php echo badge_status($surat['id_status']); ?>
+									<br />
+									<?= ($surat['id_status']== 4) ? "<span class='badge badge-danger'><i class='fas fa-exclamation-triangle'></i> Persyaratan perlu diperbaiki</span>" : ""; ?>
+								</td>
 									<td>
-										<?php
-										echo $surat['date_full'];
-										?>
+										<p class="m-0"><?= $surat['nama']; ?></p>
+										<p class="badge m-0 badge-ijomuda"><?= $surat['prodi']; ?></p>
+									</td>
+									<td>
+										<p class="m-0"><?= $surat['date_full'];	?></p>
+										<p class="badge m-0 badge-warning"><?= $surat['time']; ?></p>
+									</td>
 									</td>
 								</tr>
 							<?php } ?>
@@ -81,12 +87,7 @@
 
 
 <script>
-
-		$('#surat').dataTable({
-			
-			"ordering": false
-				
-			
-		});
-
+	$('#surat').dataTable({
+		"ordering": false
+	});
 </script>

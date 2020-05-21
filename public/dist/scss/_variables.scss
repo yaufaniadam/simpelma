@@ -23,15 +23,15 @@ $pink: #e83e8c !default;
 $red: #b0272b !default;
 $orange: #fd7e14 !default;
 $yellow: #fbc800 !default;
-$green: #065139!default;
+$green: #065139 !default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
 
 // Custom Colors
 $brand-google: #ea4335;
 $brand-facebook: #3b5998;
-$green-400: #067250!default;
-$white-op-9:rgba(255,255,255,0.9);
+$green-400: #067250 !default;
+$white-op-9:rgba(255, 255, 255, 0.9);
 
 // Set Contrast Threshold
 $yiq-contrasted-threshold: 195 !default;
@@ -39,7 +39,18 @@ $yiq-contrasted-threshold: 195 !default;
 // Typography
 $body-color: $gray-600 !default;
 
-$font-family-sans-serif: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", 'Noto Color Emoji' !default;
+$font-family-sans-serif: "Nunito",
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+"Helvetica Neue",
+Arial,
+sans-serif,
+"Apple Color Emoji",
+"Segoe UI Emoji",
+"Segoe UI Symbol",
+'Noto Color Emoji' !default;
 
 $font-weight-light: 300 !default;
 // $font-weight-base: 400;
@@ -78,28 +89,60 @@ $dropdown-font-size: 0.85rem;
 $dropdown-border-color: $border-color;
 
 // custom warna
-$perak:   #eeeced !default;
+$perak: #eeeced !default;
 $ijomuda: #8fce90 !default;
+$ungu: #d17cad !default;
+$ungutua: #880e5f !default;
+$birutua: #3775d3 !default;
+$birudongker: #212f59 !default;
+$tosca: #3fcaa1 !default;
+$toscatua: #038452 !default;
+$abutua : #556270 !default;
+$abumuda: #8d9bab !default;
+$orangepastel: #f06f4f !default;
 
 $colors: () !default;
-$colors: map-merge(
-  (
-    "perak":      $perak,
-    "ijomuda":      $ijomuda
-  ),
-  $colors
-);
+$colors: map-merge(("perak": $perak,
+		"ijomuda": $ijomuda,
+		"ungu": $ungu,
+		"ungutua": $ungutua,
+		"birutua": $birutua,
+		"birudongker": $birudongker,
+		"tosca": $tosca,
+		"toscatua": $toscatua,
+		"abutua": $abutua,
+		"abumuda": $abumuda,
+		"orangepastel": $orangepastel,
 
-$perak:        $perak !default;
-$ijomuda:        $ijomuda !default;
+	),
+	$colors);
+
+$perak: $perak !default;
+$ijomuda: $ijomuda !default;
+$ungu: $ungu !default;
+$ungutua: $ungutua !default;
+$birutua: $birutua !default;
+$birudongker: $birudongker !default;
+$tosca: $tosca !default;
+$toscatua: $toscatua !default;
+$abutua: $abutua  !default;
+$abumuda: $abumuda !default;
+$orangepastel: $orangepastel !default;
+
 
 $theme-colors: () !default;
-$theme-colors: map-merge(
-  (
-    "perak":      $perak,
-    "ijomuda":      $ijomuda
-  ),
-  $theme-colors
-);
+$theme-colors: map-merge(("perak": $perak,
+    "ijomuda": $ijomuda,
+    "ungu": $ungu,
+		"ungutua": $ungutua,
+		"birutua": $birutua,
+		"birudongker": $birudongker,
+		"tosca": $tosca,
+		"toscatua": $toscatua,
+		"abutua ": $abutua,
+		"abumuda": $abumuda,
+		"orangepastel": $orangepastel    
+    ),
+	$theme-colors);
 
 $table-color:#202124 !default;
