@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Surat extends MY_Controller
+class Surat extends Mahasiswa_Controller
 {
 
 	public function __construct()
@@ -18,7 +18,10 @@ class Surat extends MY_Controller
 	public function detail($id_surat = 0)
 	{
 		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
-		$data['title'] = 'Detail Surat';
+
+
+
+		$data['title'] = $data['surat']['id_mahasiswa'];
 		$data['view'] = 'surat/detail';
 		$this->load->view('layout/layout', $data);
 	}
@@ -92,6 +95,8 @@ class Surat extends MY_Controller
 				$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
 				$data['keterangan_surat'] = $this->surat_model->get_keterangan_surat($id_surat);
 				$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
+				$data['timeline'] = $this->surat_model->get_timeline($id_surat);
+				
 				$data['title'] = 'Ajukan Surat';
 				$data['view'] = 'surat/tambah';
 				$this->load->view('layout/layout', $data);
@@ -128,8 +133,16 @@ class Surat extends MY_Controller
 			$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
 			$data['keterangan_surat'] = $this->surat_model->get_keterangan_surat($id_surat);
 			$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
-			$data['title'] = 'Ajukan Surat';
-			$data['view'] = 'surat/tambah';
+			$data['timeline'] = $this->surat_model->get_timeline($id_surat);
+
+			if ($data['surat']['id_mahasiswa'] == $this->session->userdata('user_id')) {
+				$data['title'] = 'Ajukan Surat';
+				$data['view'] = 'surat/tambah';
+			} else {
+				$data['title'] = 'Forbidden';
+				$data['view'] = 'restricted';
+			}
+
 			$this->load->view('layout/layout', $data);
 		}
 	}

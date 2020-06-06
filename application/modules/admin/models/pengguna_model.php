@@ -15,12 +15,21 @@ class Pengguna_model extends CI_Model
 
 	//---------------------------------------------------
 	// get all users for server-side datatable processing (ajax based)
-	public function get_pengguna()
+	public function get_pengguna( $role )
 	{
-		return $this->db->query("SELECT a.* FROM users a
-			WHERE a.role != 1 ");
+		if ($role == '') {
+			$where ="WHERE a.role != 1";
+		} else {
+			$where ="WHERE a.role != 1 AND a.role=$role";
+		}
+		return $this->db->query("SELECT a.*, r.role FROM users a
+		LEFT JOIN role r ON r.id = a.role
+		$where ");
 	}
 
+	public function get_role() {
+		return $this->db->get_where('role', array('id !='=>'1'))->result_array();
+	}
 	// Count total users by role
 	public function count_all_users_by_role($role)
 	{
@@ -33,23 +42,7 @@ class Pengguna_model extends CI_Model
 		return $this->db->count_all_results('users');
 	}
 
-	//---------------------------------------------------
-	// Get all users for pagination
-	public function get_all_users_for_pagination($limit, $offset)
-	{
-		$wh = array();
-		$this->db->order_by('created_at', 'desc');
-		$this->db->limit($limit, $offset);
 
-		if (count($wh) > 0) {
-			$WHERE = implode(' and ', $wh);
-			$query = $this->db->get_where('users', $WHERE);
-		} else {
-			$query = $this->db->get('users');
-		}
-		return $query->result_array();
-		//echo $this->db->last_query();
-	}
 
 	//---------------------------------------------------
 	// Get user detial by ID

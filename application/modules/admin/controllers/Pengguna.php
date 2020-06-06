@@ -11,9 +11,10 @@ class Pengguna extends Admin_Controller
 		$this->load->library('excel');	
 	}
 
-	public function index()
+	public function index( $role = 0 )
 	{
-		$data['pengguna'] = $this->pengguna_model->get_pengguna();	
+		$data['pengguna'] = $this->pengguna_model->get_pengguna($role);	
+		$data['role'] = $this->pengguna_model->get_role();	
 		$data['title'] = 'Semua Pengguna'; 
 		$data['view'] = 'admin/pengguna/list';
 
@@ -82,12 +83,14 @@ class Pengguna extends Admin_Controller
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['user'] = $this->pengguna_model->get_user_by_id($id);
+				$data['role'] = $this->pengguna_model->get_role();	
 				$data['title'] = 'Edit Pengguna';
 				$data['view'] = 'admin/pengguna/edit';
 				$this->load->view('layout/layout', $data);
 			} else {				
 				$data = array(
 					'email' => $this->input->post('email'),
+					'role' => $this->input->post('role'),
 					'password' => ($this->input->post('password') !== "" ? password_hash($this->input->post('password'), PASSWORD_BCRYPT) : $this->input->post('password_hidden')),
 					'updated_at' => date('Y-m-d : h:m:s'),
 				);
@@ -102,6 +105,7 @@ class Pengguna extends Admin_Controller
 			}
 		} else {
 			$data['user'] = $this->pengguna_model->get_user_by_id($id);
+			$data['role'] = $this->pengguna_model->get_role();	
 			$data['title'] = 'Edit Pengguna';
 			$data['view'] = 'admin/pengguna/edit';
 			$this->load->view('layout/layout', $data);

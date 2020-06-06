@@ -33,7 +33,6 @@
 					);
 					$result = $this->auth_model->login($data);
 					if($result){	
-						echo $result['id_prodi'];
 						$user_data = array(
 							'user_id' => $result['id'],
 							'username' => $result['username'],

@@ -22,17 +22,13 @@
 	<link href="<?= base_url() ?>public/vendor/danielupload/demo/styles.css" rel="stylesheet">
 	<link href="<?= base_url() ?>/public/vendor/summernote/summernote-bs4.min.css" rel="stylesheet">
 
+
 	<!-- Bootstrap core JavaScript-->
 	<script src="<?= base_url() ?>public/vendor/jquery/jquery.min.js"></script>
 	<script src="<?= base_url() ?>public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
 	<script src="<?= base_url() ?>public/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-	<!-- Custom scripts for all pages-->
-	<script src="<?= base_url() ?>public/dist/js/sb-admin-2.min.js"></script>
-
-
 </head>
 
 <body id="page-top">
@@ -41,7 +37,7 @@
 	<div id="wrapper">
 
 		<?php
-		if ($this->session->userdata('role') == 3) {			
+		if ($this->session->userdata('role') == 3) {
 			include('include/mahasiswa_sidebar.php');
 		} else {
 			include('include/admin_sidebar.php');
@@ -108,10 +104,21 @@
 		</div>
 	</div>
 
+	<script src="<?= base_url() ?>/public/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 	<script type="text/javascript">
 		$('#confirm-delete').on('show.bs.modal', function(e) {
 			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+		});
+
+		$(document).ready(function() {
+			$('#datatable').DataTable();
+		});
+
+		var table = $('#datatable').DataTable();
+		$('#selectload').on('change', function(){
+		table.columns(2).search( this.value ).draw();
 		});
 	</script>
 
@@ -158,3 +165,5 @@
 </body>
 
 </html>
+
+<script src="<?= base_url() ?>public/dist/js/sb-admin-2.min.js"></script>

@@ -79,18 +79,28 @@
 						<input type="hidden" name="password_hidden" value="<?=$user['password']; ?>">
 					</div>
 				</div>
-
 				<div class="form-group">
+					<label for="password" class="control-label">Role</label>
+					<div>
+					<select id="selectload" class="form-control" name="role">
+						<?php foreach($role as $role ) { ?>
+							<option value="<?=  $role['id'] ?>" <?=($user['role'] == $role['id']  ) ? "selected" : ""; ?> ><?= $role['role'] ?> </option>
+						<?php } ?>
+					</select>
+					</div>
+				</div>
+
+			<!--	<div class="form-group">
 					<label for="nama" class="control-label">Prodi</label>
 					<div class="">
 						
 
 					</div>
-				</div>
+				</div> -->
 
 				<div class="form-group">
 					<div>
-						<input type="submit" name="submit" value="Edit Mahasiswa" class="btn btn-perak">
+						<input type="submit" name="submit" value="Edit Pengguna" class="btn btn-perak">
 					</div>
 				</div>
 

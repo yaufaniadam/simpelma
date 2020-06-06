@@ -1,15 +1,13 @@
-<?php
-/*
-	echo "<pre>";				
-		print_r($query);
-	echo "</pre>"; 
-*/
-?>
 <div class="row">
 	<div class="col-12">
 
 		<div class="card card-success card-outline">
-			<div class="card-header">Surat Masuk
+			<div class="card-header">Filter : 
+			
+					<a href="">Semua</a> | 
+					<a href="">Perlu Diproses <span class="badge badge-danger">12</span></a> |
+					<a href="">Telah Terbit</a>
+				
 			</div>
 			<div class="card-body">
 				<?php
@@ -84,7 +82,6 @@
 <!-- DataTables -->
 <script src="<?= base_url() ?>/public/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
 
 <script>
 	$('#surat').dataTable({

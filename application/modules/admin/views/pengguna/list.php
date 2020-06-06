@@ -24,6 +24,16 @@
 					</span>
 					<span class="text">Upload Pengguna</span>
 				</a>
+
+				<span class="float-right">
+					<select id="selectload">
+						<option value="">-- Select Role --</option>
+						<?php foreach($role as $role ) {
+							echo "<option value='" . $role['role'] ."'>". $role['role'] ."</option>";
+						} ?>
+					</select>
+				</span>
+				
 			</div>
 
 			<div class="card-body">
@@ -31,9 +41,9 @@
 				<table id="datatable" class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th style="width:40%">Username</th>
+							<th style="width:40%">Username</th>							
 							<th class="text-center">Email</th>
-
+							<th class="text-center">Role</th>
 							<th class="text-center">Aksi</th>
 						</tr>
 					</thead>
@@ -42,6 +52,7 @@
 						<tr>
 							<td><?= $row['username']; ?></td>
 							<td><?= $row['email']; ?></td>
+							<td><?= $row['role']; ?></td>
 
 							<td class="text-center">
 								<a class="btn btn-warning btn-sm btn-circle"

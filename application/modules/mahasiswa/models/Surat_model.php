@@ -15,7 +15,7 @@ class Surat_model extends CI_Model
     }
     public function get_detail_surat($id_surat)
     {
-        $query = $this->db->query("SELECT s.id, s.id_kategori_surat, k.kategori_surat, k.kat_keterangan_surat, k.klien, ss.id_status, st.status, st.badge, p.nama,p.nim, p.photo FROM surat s
+        $query = $this->db->query("SELECT s.id, s.id_kategori_surat, s.id_mahasiswa, k.kategori_surat, k.kat_keterangan_surat, k.klien, ss.id_status, st.status, st.badge, p.nama,p.nim, p.photo FROM surat s
         LEFT JOIN profil p ON p.id_user = s.id_mahasiswa        
         LEFT JOIN surat_status ss ON ss.id_surat = s.id        
         LEFT JOIN status st ON st.id = ss.id_status
@@ -46,6 +46,15 @@ class Surat_model extends CI_Model
         return $hasil;
     }
 
-    
+    public function get_timeline($id_surat)
+    {
+        $query = $this->db->query("SELECT ss.id_status, DATE_FORMAT(ss.date, '%d %M') as date,  DATE_FORMAT(ss.date, '%H:%i') as time,  DATE_FORMAT(ss.date, '%d %M %Y') as date_full, s.status, s.badge          
+        FROM surat_status ss
+        LEFT JOIN status s ON s.id = ss.id_status  
+        where ss.id_surat='$id_surat'
+        ORDER BY ss.id DESC
+        ");
+        return $result = $query->result_array();
+    }    
 
 }

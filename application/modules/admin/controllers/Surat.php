@@ -10,7 +10,7 @@ class Surat extends Admin_Controller
  
 	public function index()
 	{				
-		$data['query'] = $this->surat_model->get_surat();
+		$data['query'] = $this->surat_model->get_surat($id_status = 0);
 		$data['title'] = 'Surat';
 		$data['view'] = 'surat/index';
 		$this->load->view('layout/layout', $data);
@@ -19,8 +19,17 @@ class Surat extends Admin_Controller
 	{				
 		$data['status'] = $this->surat_model->get_surat_status($id_surat);
 		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
-		$data['title'] = 'Detail Surat';
-		$data['view'] = 'surat/detail';
+		$data['timeline'] = $this->surat_model->get_timeline($id_surat);
+		$data['timeline'] = $this->surat_model->get_timeline($id_surat);
+		
+		if( ($data['surat']['id_prodi'] == $this->session->userdata('id_prodi') && $this->session->userdata('role') !==1) || $this->session->userdata('role') == 1) {
+			$data['title'] = 'Detail Surat';
+			$data['view'] = 'surat/detail';
+		} else {
+			$data['title'] = 'Forbidden';
+			$data['view'] = 'restricted';
+		}
+
 		$this->load->view('layout/layout', $data);
 	}
 	public function proses_surat($id_surat=0)
@@ -44,11 +53,11 @@ class Surat extends Admin_Controller
 					$id_status = 4;
 				}
 			 } else {
-				if($this->input->post('rev2')==1) {
+				//if($this->input->post('rev2')==1) {
 					$id_status = 7;
-				} else {
-					$id_status = 3;
-				}
+				// } else {
+				// 	$id_status = 3;
+				// }
 			 }
 
 			$id_surat = $this->input->post('id_surat');	
@@ -70,11 +79,49 @@ class Surat extends Admin_Controller
 
 			redirect(base_url('admin/surat/detail/'. $id_surat));
 		} else {
-			$data['status'] = $this->surat_model->get_surat_status($id_surat);
-			$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
-			$data['title'] = 'Detail Surat';
-			$data['view'] = 'surat/detail';
+			$data['title'] = 'Forbidden';
+			$data['view'] = 'restricted';
 			$this->load->view('layout/layout', $data);
+		}
+	}
+
+	public function disetujui()
+	{	
+		if ($this->input->post('submit')) {				
+			 
+			if($this->session->userdata('role') == 5) { // direktur
+				$id_surat = $this->input->post('id_surat');	
+				$result = $this->db->set('id_status', 9 )			
+						->set('date', 'NOW()', FALSE)		
+						->set('id_surat', $id_surat)	
+						->insert('surat_status');
+
+				if ($result) {
+					$this->session->set_flashdata('msg', 'Surat sudah diberi persetujuan oleh Direktur Pascasarjana!');
+					redirect(base_url('admin/surat/detail/' . $id_surat));
+				}
+			} elseif( $this->session->userdata('role') == 6 && $this->session->userdata('id_prodi') == $this->input->post('prodi') ) { // kaprodi
+
+				$id_surat = $this->input->post('id_surat');	
+				$result = $this->db->set('id_status', 8 )			
+						->set('date', 'NOW()', FALSE)		
+						->set('id_surat', $id_surat)	
+						->insert('surat_status');
+
+				if ($result) {
+					$this->session->set_flashdata('msg', 'Surat sudah diberi persetujuan oleh Kaprodi!');
+					redirect(base_url('admin/surat/detail/' . $id_surat));
+				}
+			}
+		}
+	}
+
+	public function terbitkan_surat()
+	{	
+		if ($this->input->post('submit')) {				
+			 
+			echo "terbitkan surat";
+			
 		}
 	}
 	

@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div class="col-8">
-		<div class="card">
+		<div class="card shadow">
 			<div class="card-header py-3">
 				Keterangan
 			</div>
@@ -17,21 +17,30 @@
 						<?= isset($msg) ? $msg : ''; ?>
 					</div>
 				<?php endif; ?>
-				<?php if ( $surat['id_status'] == '7') { ?>
-					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-check-square"></i> Permohonan diterima. Surat dapat diunduh melalui tautan  di bawah.</strong></p>
+				<?php if ( $surat['id_status'] == '9') { ?>
+					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-signature"></i> Permohonan disetujui oleh Direktur Pascasarjana UMY</strong></p>	
+
+				<?php } elseif ( $surat['id_status'] == '8') { ?>
+					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-signature"></i> Permohonan disetujui oleh Ketua Program Studi</strong></p>	
+
+				<?php } elseif ( $surat['id_status'] == '7') { ?>
+					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-check-square"></i> Permohonan sudah diverifikasi oleh Tata Usaha.</strong></p>
 			
 				<?php } elseif( $surat['id_status'] == '6') { ?>
 					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-ban"></i> Permohonan ditolak. Silakan mengajukan surat baru.</strong></p>
 			
 				<?php } elseif ( $surat['id_status'] == '5') { ?>
-					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-exclamation-triangle"></i> Menunggu verifikasi hasil revisi oleh Tata Usaha.</strong></p>
+					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-hourglass-half"></i> Menunggu verifikasi hasil revisi oleh Tata Usaha.</strong></p>
 			
 				<?php } elseif ( $surat['id_status'] == '4') { ?>
 					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-exclamation-triangle"></i> Perbaiki data yang belum sesuai <strong>yang diberi tanda merah.</strong></p>
+
 				<?php } elseif ( $surat['id_status'] == '3') { ?>
-					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-exclamation-triangle"></i> Menunggu Persetujuan Kepala Prodi</p>
+					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-hourglass-half"></i> Menunggu Persetujuan Kepala Prodi</p>
+
 				<?php } elseif ( $surat['id_status'] == '2') { ?>
-					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-exclamation-triangle"></i> Menunggu Verifikasi Staf Tata Usaha</p>	
+					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-hourglass-half"></i> Menunggu Verifikasi Staf Tata Usaha</p>	
+
 				<?php } else { ?>
 					<p class="alert alert-warning mb-4"><i class="fas fa-exclamation-triangle"></i> Lengkapi formulir di bawah ini.</p>
 				<?php } ?>
@@ -68,23 +77,22 @@
 	</div>
 	<div class="col-4">
 		
-		<div class="card">
-			<div class="card-header py-3">
-				Status Surat
-			</div>
-			<div class="card-body">
-				<p class="h5 text-center pb-2 text-<?= $surat['badge']; ?>"> <?= $surat['status']; ?> </p>
-				<ul class="list-group">
-
-					<li class='list-group-item'>Tanggal masuk
-						<span class='badge badge-warning float-right'><?= tgl_status_surat($surat['id'], '2')['date']; ?></span>
-					</li>
-					<li class='list-group-item'>Tanggal terbit</span>
-						<span class='badge badge-success float-right'><?= tgl_status_surat($surat['id'], '5')['date']; ?></span>
-					</li>
-
-
-				</ul>
+	<div class="card shadow">
+			<a href="#collStatus" class="d-block card-header pt-3 pb-2 bg-<?= $surat['badge']; ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collStatus">
+				<p class="h5 text-center font-weight-bold text-white"> <?= $surat['status']; ?> </p>
+			</a>
+			<div class="collapse show" id="collStatus">
+				<div class="card-body pl-2">
+					<ul class="timeline">
+						<?php foreach ($timeline as $tl) { ?>
+							<li>
+								<span class="badge badge-<?= $tl['badge']; ?>"><?= $tl['status']; ?></span>
+								<span class="badge badge-secondary"><?= $tl['date']; ?></span>
+								<span class="badge badge-perak"><?= $tl['time']; ?></span>
+							</li>
+						<?php } ?>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
