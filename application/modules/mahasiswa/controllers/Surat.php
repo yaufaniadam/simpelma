@@ -114,21 +114,24 @@ class Surat extends Mahasiswa_Controller
 					->set('id_status', $id_status) //baru
 					->set('date', 'NOW()', FALSE)
 					->insert('surat_status');
+
+					//insert field ke tabel keterangan_surat
+				if ($insert) {
+					foreach ($this->input->post('dokumen') as $id => $dokumen) {
+						$this->db->where(array('id_kat_keterangan_surat' => $id, 'id_surat' => $id_surat));
+						$this->db->update(
+							'keterangan_surat',
+							array(
+								'value' => $dokumen
+							)
+						);
+					}
+				}
+				//redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
 			}
 
-			//insert field ke tabel keterangan_surat
-			if ($insert) {
-				foreach ($this->input->post('dokumen') as $id => $dokumen) {
-					$this->db->where(array('id_kat_keterangan_surat' => $id, 'id_surat' => $id_surat));
-					$this->db->update(
-						'keterangan_surat',
-						array(
-							'value' => $dokumen
-						)
-					);
-				}
-			}
-			redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
+			
+			
 		} else {
 			$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
 			$data['keterangan_surat'] = $this->surat_model->get_keterangan_surat($id_surat);

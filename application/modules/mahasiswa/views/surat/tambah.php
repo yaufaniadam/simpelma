@@ -8,15 +8,6 @@
 			</div>
 			<div class="card-body">
 				
-
-				<?php if (isset($msg) || validation_errors() !== '') : ?>
-					<div class="alert alert-danger alert-dismissible">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-						<h4><i class="fa fa-exclamation"></i> Terjadi Kesalahan</h4>
-						<?= validation_errors(); ?>
-						<?= isset($msg) ? $msg : ''; ?>
-					</div>
-				<?php endif; ?>
 				<?php if ( $surat['id_status'] == '9') { ?>
 					<p class="alert alert-<?= $surat['badge']; ?> mb-4"><i class="fas fa-signature"></i> Permohonan disetujui oleh Direktur Pascasarjana UMY</strong></p>	
 

@@ -102,12 +102,15 @@ function generate_form_field($id, $id_surat, $id_status)
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 	
 	<?php } elseif ($fields['type'] == 'ta') { //tahun akademik ?>
-		<select class="form-control" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>">
+		<select class="form-control
+		<?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> 
+		<?= (($fields['verifikasi'] == 0) && ($id_status == 4)) ? 'is-invalid' : ''; ?>" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>">
+			<option value=""> -- Pilih Tahun Akademik -- </option>
 			<?php 
 				$cur_year = date("Y"); 
 				$cur_semester = (date("n") <= 6 ) ?  $cur_year-1 : $cur_year ;
 				for ($x = $cur_semester; $x <= $cur_year+1; $x++) { 					
-					echo $value_select = sprintf("%d / %d", $x, $x+1); ?>					
+					$value_select = sprintf("%d / %d", $x, $x+1); ?>					
 					<option 
 						value="<?= $value_select; ?>"
 						<?php 						
@@ -118,9 +121,13 @@ function generate_form_field($id, $id_surat, $id_status)
 				<?php  } 
 			?>
 		</select>
+		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
 	<?php } elseif ($fields['type'] == 'sem') { //tahun akademik ?>
-		<select class="form-control" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>">
+		<select class="form-control
+		<?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> 
+		<?= (($fields['verifikasi'] == 0) && ($id_status == 4)) ? 'is-invalid' : ''; ?>" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>">
+		<option value=""> -- Pilih Semester -- </option>
 			<?php 
 				$cur_year = date("Y"); 
 				$cur_semester = (date("n") <= 6 ) ?  "Genap": "Ganjil";				
@@ -138,6 +145,7 @@ function generate_form_field($id, $id_surat, $id_status)
 					echo ( $fields['value'] == "Genap" ) ? "selected" : ""; ?>
 			>Genap</option>			
 		</select>
+		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 	<?php }
 }
 
