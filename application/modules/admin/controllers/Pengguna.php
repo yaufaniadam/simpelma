@@ -1,21 +1,23 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
+
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 class Pengguna extends Admin_Controller
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('pengguna_model', 'pengguna_model');	
+		$this->load->model('pengguna_model', 'pengguna_model');
 		$this->load->model('prodi_model', 'prodi_model');
-		$this->load->library('datatable'); 
-		$this->load->library('excel');	
+		$this->load->library('datatable');
 	}
 
-	public function index( $role = 0 )
+	public function index($role = 0)
 	{
-		$data['pengguna'] = $this->pengguna_model->get_pengguna($role);	
-		$data['role'] = $this->pengguna_model->get_role();	
-		$data['title'] = 'Semua Pengguna'; 
+		$data['pengguna'] = $this->pengguna_model->get_pengguna($role);
+		$data['role'] = $this->pengguna_model->get_role();
+		$data['title'] = 'Semua Pengguna';
 		$data['view'] = 'admin/pengguna/list';
 
 		$this->load->view('layout/layout', $data);
@@ -24,36 +26,44 @@ class Pengguna extends Admin_Controller
 	public function tambah()
 	{
 		if ($this->input->post('submit')) {
-			$this->form_validation->set_rules('username', 'Username', 'trim|required|is_unique[users.username]',
-				array('required'=>'%s wajib diisi', 'is_unique'=>'%s tidak tersedia, gunakan yang lain.'));
-			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required|is_unique[users.email]',
-				array('required'=>'%s wajib diisi','valid_email'=>'Format %s salah',  'is_unique'=>'%s tidak tersedia, gunakan yang lain.'));	
-			$this->form_validation->set_rules('role', 'Role', 'trim|required', array('required'=>'%s wajib diisi'));	
-			$this->form_validation->set_rules('password', 'Password', 'trim|required', array('required'=>'%s wajib diisi'));
-			$this->form_validation->set_rules('id_prodi', 'Program Studi', 'required',array('required'=>'%s wajib diisi'));	
-			$this->form_validation->set_rules('nama', 'Nama Lengkap', 'trim|required', array('required'=>'%s wajib diisi'));
+			$this->form_validation->set_rules(
+				'username',
+				'Username',
+				'trim|required|is_unique[users.username]',
+				array('required' => '%s wajib diisi', 'is_unique' => '%s tidak tersedia, gunakan yang lain.')
+			);
+			$this->form_validation->set_rules(
+				'email',
+				'Email',
+				'trim|valid_email|required|is_unique[users.email]',
+				array('required' => '%s wajib diisi', 'valid_email' => 'Format %s salah',  'is_unique' => '%s tidak tersedia, gunakan yang lain.')
+			);
+			$this->form_validation->set_rules('role', 'Role', 'trim|required', array('required' => '%s wajib diisi'));
+			$this->form_validation->set_rules('password', 'Password', 'trim|required', array('required' => '%s wajib diisi'));
+			$this->form_validation->set_rules('id_prodi', 'Program Studi', 'required', array('required' => '%s wajib diisi'));
+			$this->form_validation->set_rules('nama', 'Nama Lengkap', 'trim|required', array('required' => '%s wajib diisi'));
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['role'] = $this->pengguna_model->role();
 				$data['prodi'] = $this->prodi_model->get_prodi();
-				$data['title'] = 'Tambah Pengguna'; 
+				$data['title'] = 'Tambah Pengguna';
 				$data['view'] = 'admin/pengguna/tambah';
 				$this->load->view('layout/layout', $data);
 			} else {
-				
+
 				$data = array(
 					'username' => $this->input->post('username'),
-					'email' => $this->input->post('email'),			
+					'email' => $this->input->post('email'),
 					'role' => $this->input->post('role'),
 					'password' =>  password_hash($this->input->post('password'), PASSWORD_BCRYPT),
 					'created_at' => date('Y-m-d : h:m:s'),
-					'updated_at' => date('Y-m-d : h:m:s'),			
+					'updated_at' => date('Y-m-d : h:m:s'),
 				);
 
 				$data = $this->security->xss_clean($data);
 				$result = $this->pengguna_model->add_user($data);
 				if ($result) {
-					$profil= array(
+					$profil = array(
 						'id_user' => $this->db->insert_id(),
 						'nama' => $this->input->post('nama'),
 						'id_prodi' => $this->input->post('id_prodi')
@@ -77,17 +87,17 @@ class Pengguna extends Admin_Controller
 	public function edit($id = 0)
 	{
 		if ($this->input->post('submit')) {
-		
+
 			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
-		//	$this->form_validation->set_rules('mobile_no', 'Number', 'trim|required');
+			//	$this->form_validation->set_rules('mobile_no', 'Number', 'trim|required');
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['user'] = $this->pengguna_model->get_user_by_id($id);
-				$data['role'] = $this->pengguna_model->get_role();	
+				$data['role'] = $this->pengguna_model->get_role();
 				$data['title'] = 'Edit Pengguna';
 				$data['view'] = 'admin/pengguna/edit';
 				$this->load->view('layout/layout', $data);
-			} else {				
+			} else {
 				$data = array(
 					'email' => $this->input->post('email'),
 					'role' => $this->input->post('role'),
@@ -105,7 +115,7 @@ class Pengguna extends Admin_Controller
 			}
 		} else {
 			$data['user'] = $this->pengguna_model->get_user_by_id($id);
-			$data['role'] = $this->pengguna_model->get_role();	
+			$data['role'] = $this->pengguna_model->get_role();
 			$data['title'] = 'Edit Pengguna';
 			$data['view'] = 'admin/pengguna/edit';
 			$this->load->view('layout/layout', $data);
@@ -137,7 +147,7 @@ class Pengguna extends Admin_Controller
 			if (!is_dir($upload_path)) {
 				mkdir($upload_path, 0777, TRUE);
 			}
-		
+
 			$config = array(
 				'upload_path' => $upload_path,
 				'allowed_types' => "xlsx",
@@ -151,7 +161,7 @@ class Pengguna extends Admin_Controller
 
 			if ($upload) { // Jika proses upload sukses			    	
 
-				$excelreader = new PHPExcel_Reader_Excel2007();
+				$excelreader = new PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 				$loadexcel = $excelreader->load('./uploads/pengguna/' . $upload['file_name']); // Load file yang tadi diupload ke folder excel
 				$sheet = $loadexcel->getActiveSheet()->toArray(null, true, true, true);
 
@@ -160,16 +170,16 @@ class Pengguna extends Admin_Controller
 
 				$data['title'] = 'Upload Pengguna';
 				$data['view'] = 'admin/pengguna/upload';
-			
+
 				$this->load->view('layout/layout', $data);
 			} else {
-	
+
 				$data['title'] = 'Upload Pengguna';
 				$data['view'] = 'admin/pengguna/upload';
 				$this->load->view('layout/layout', $data);
 			}
 		} else {
-			
+
 			$data['title'] = 'Upload Pengguna';
 			$data['view'] = 'admin/pengguna/upload';
 			$this->load->view('layout/layout', $data);
@@ -179,27 +189,27 @@ class Pengguna extends Admin_Controller
 	public function import($file_excel)
 	{
 
-		$excelreader = new PHPExcel_Reader_Excel2007();
+		$excelreader = new Xlsx;
 		$loadexcel = $excelreader->load('./uploads/pengguna/' . $file_excel); // Load file yang telah diupload ke folder excel
 		$sheet = $loadexcel->getActiveSheet()->toArray(null, true, true, true);
 
 		$data2 = array();
 
-			$numrow = 1;
-			foreach ($sheet as $row) {
+		$numrow = 1;
+		foreach ($sheet as $row) {
 
-				if ($numrow > 1) {
-					// Kita push (add) array data ke variabel data
-					array_push($data2, array(
-						'password' => password_hash($row['A'], PASSWORD_BCRYPT), 
-						'username' => $row['A'], 						
-						'email' => $row['C'],
-						'created_at' => date('Y-m-d : h:m:s'),						
-					));
-				}
-
-				$numrow++; // Tambah 1 setiap kali looping
+			if ($numrow > 1) {
+				// Kita push (add) array data ke variabel data
+				array_push($data2, array(
+					'password' => password_hash($row['A'], PASSWORD_BCRYPT),
+					'username' => $row['A'],
+					'email' => $row['C'],
+					'created_at' => date('Y-m-d : h:m:s'),
+				));
 			}
+
+			$numrow++; // Tambah 1 setiap kali looping
+		}
 
 		// Panggil fungsi insert_pengguna
 		$this->pengguna_model->import_pengguna($data2);

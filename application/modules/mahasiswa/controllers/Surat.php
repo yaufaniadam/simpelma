@@ -1,11 +1,11 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 class Surat extends Mahasiswa_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('surat_model', 'surat_model');
+		$this->load->model('notif/Notif_model', 'notif_model');
 	}
 
 	public function index()
@@ -18,9 +18,6 @@ class Surat extends Mahasiswa_Controller
 	public function detail($id_surat = 0)
 	{
 		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
-
-
-
 		$data['title'] = $data['surat']['id_mahasiswa'];
 		$data['view'] = 'surat/detail';
 		$this->load->view('layout/layout', $data);
@@ -28,7 +25,11 @@ class Surat extends Mahasiswa_Controller
 
 	public function ajukan($id_kategori = 0)
 	{
-		$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
+
+		echo '<pre>';
+		print_r($_SESSION['aktif']);
+		echo '</pre>';
+		$data['kategori_surat'] = $this->surat_model->get_kategori_surat();
 		$data['title'] = 'Ajukan Surat';
 		$data['view'] = 'surat/ajukan';
 		$this->load->view('layout/layout', $data);
@@ -43,22 +44,24 @@ class Surat extends Mahasiswa_Controller
 
 		$data = $this->security->xss_clean($data);
 		$result = $this->surat_model->tambah($data);
-
+		//ambil last id surat yg baru diinsert
 		$insert_id = $this->db->insert_id();
-
+		// set status surat
 		$this->db->set('id_surat', $insert_id)
 			->set('id_status', 1)
+			->set('pic', $this->session->userdata('user_id'))
 			->set('date', 'NOW()', FALSE)
 			->insert('surat_status');
 
+		//ambil id surat berdasarkan last id status surat
 		$insert_id2 = $this->db->select('id_surat')->from('surat_status')->where('id=', $this->db->insert_id())->get()->row_array();
-
-		echo $insert_id2['id_surat'];
-
+		// ambil keterangan surat berdasar kategori surat
 		$kat_surat = $this->db->select('kat_keterangan_surat')->from('kategori_surat')->where('id=', $id)->get()->row_array();
 
+		// explode kterangan surat
 		$kat_surat = explode(',', $kat_surat['kat_keterangan_surat']);
 
+		// foreach keterangan surat, lalu masukkan nilai awal (nilai kosong) berdasakan keterangan dari kategori surat
 		foreach ($kat_surat as $key => $id_kat) {
 			$this->db->insert(
 				'keterangan_surat',
@@ -66,12 +69,20 @@ class Surat extends Mahasiswa_Controller
 					'value' => '',
 					'id_surat' =>  $insert_id2['id_surat'],
 					'id_kat_keterangan_surat' => $id_kat,
-
 				)
 			);
 		}
 
-		if ($result) {
+		$data_notif = array(
+			'id_surat' => $insert_id2['id_surat'],
+			'id_status' => 1,
+			'kepada' => $_SESSION['user_id'],
+			'role' => array(3)
+		);
+
+		$results = $this->notif_model->send_notif($data_notif);
+
+		if ($results) {
 			$this->session->set_flashdata('msg', 'Berhasil!');
 			redirect(base_url('mahasiswa/surat/tambah/' . $insert_id));
 		}
@@ -81,7 +92,7 @@ class Surat extends Mahasiswa_Controller
 	{
 
 		if ($this->input->post('submit')) {
-
+			// validasi form, form ini digenerate secara otomatis
 			foreach ($this->input->post('dokumen') as $id => $dokumen) {
 				$this->form_validation->set_rules(
 					'dokumen[' . $id . ']',
@@ -96,7 +107,7 @@ class Surat extends Mahasiswa_Controller
 				$data['keterangan_surat'] = $this->surat_model->get_keterangan_surat($id_surat);
 				$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
 				$data['timeline'] = $this->surat_model->get_timeline($id_surat);
-				
+
 				$data['title'] = 'Ajukan Surat';
 				$data['view'] = 'surat/tambah';
 				$this->load->view('layout/layout', $data);
@@ -112,10 +123,11 @@ class Surat extends Mahasiswa_Controller
 				//tambah status ke tb surat_status
 				$insert = $this->db->set('id_surat', $id_surat)
 					->set('id_status', $id_status) //baru
+					->set('pic', $this->session->userdata('user_id'))
 					->set('date', 'NOW()', FALSE)
 					->insert('surat_status');
 
-					//insert field ke tabel keterangan_surat
+				//insert field ke tabel keterangan_surat
 				if ($insert) {
 					foreach ($this->input->post('dokumen') as $id => $dokumen) {
 						$this->db->where(array('id_kat_keterangan_surat' => $id, 'id_surat' => $id_surat));
@@ -126,12 +138,18 @@ class Surat extends Mahasiswa_Controller
 							)
 						);
 					}
-				}
-				//redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
-			}
 
-			
-			
+					$data_notif = array(
+						'id_surat' => $id_surat,
+						'id_status' => 2,
+						'kepada' => $_SESSION['user_id'],
+						'role' => array(2, 3)
+					);
+
+					$results = $this->notif_model->send_notif($data_notif);
+				}
+				redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
+			}
 		} else {
 			$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
 			$data['keterangan_surat'] = $this->surat_model->get_keterangan_surat($id_surat);
@@ -217,6 +235,18 @@ class Surat extends Mahasiswa_Controller
 				'orig' => $upload_path . '/' . $data['file_name']
 			]);
 		}
+	}
+
+	public function tampil_surat($id_surat)
+	{
+		$surat = $this->surat_model->get_detail_surat($id_surat);
+		$no_surat = $this->surat_model->get_no_surat($id_surat);
+
+		$data['title'] = 'Tampil Surat';
+		$data['surat'] = $surat;
+		$data['no_surat'] = $no_surat;
+		$data['view'] = 'admin/surat/tampil_surat.php';
+		$this->load->view('layout/layout', $data);
 	}
 
 	function _create_thumbs($upload_data)

@@ -1,11 +1,11 @@
 <section class="content-header">
-  <h1>Beranda Residen</h1>
+  <h1>Selamat Datang</h1>
 </section>
 
 <section class="content">
   <div class="row">
-    <div class="col-lg-3 col-6">      
-      
+    <div class="col-lg-3 col-6">
+
     </div>
   </div>
 </section>

@@ -13,9 +13,7 @@
 
 	<!-- Custom fonts for this template-->
 	<link href="<?= base_url() ?>/public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-	<link
-		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
 	<!-- Custom styles for this template-->
 	<link href="<?= base_url() ?>/public/dist/css/sb-admin-2.min.css" rel="stylesheet">
@@ -39,65 +37,60 @@
 							<div class="col-lg-6">
 								<div class="p-5">
 									<div class="text-center">
-										<img src="<?=base_url('public/dist/img/logopps.png'); ?>" />
-										<h1 class="h4 text-gray-900 mb-4">SIM PELAYANAN</h1>
+										<img src="<?= base_url('public/dist/img/logopps.png'); ?>" />
+										<h1 class="h4 text-gray-900 mb-4"><?= (!$ref) ? "Login SSO" : "Login non SSO"; ?></h1>
+
 									</div>
 
 									<?php if (isset($msg) || validation_errors() !== '') : ?>
-									<div class="alert alert-warning alert-dismissible">
-										<button type="button" class="close" data-dismiss="alert"
-											aria-hidden="true">×</button>
-										<h4><i class="icon fa fa-warning"></i> Alert!</h4>
-										<?= validation_errors(); ?>
-										<?= isset($msg) ? $msg : ''; ?>
-									</div>
+										<div class="alert alert-warning alert-dismissible">
+											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+											<h4><i class="icon fa fa-warning"></i> Alert!</h4>
+											<?= validation_errors(); ?>
+											<?= isset($msg) ? $msg : ''; ?>
+										</div>
 									<?php endif; ?>
 									<?php if ($this->session->flashdata('error')) : ?>
-									<div class="alert alert-danger">
-										<a href="#" class="close" data-dismiss="alert" aria-label="close"
-											title="close">×</a>
-										<?= $this->session->flashdata('error') ?>
-									</div>
+										<div class="alert alert-danger">
+											<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+											<?= $this->session->flashdata('error') ?>
+										</div>
 									<?php endif; ?>
 									<?php if ($this->session->flashdata('success')) : ?>
-									<div class="alert alert-success">
-										<a href="#" class="close" data-dismiss="alert" aria-label="close"
-											title="close">×</a>
-										<?= $this->session->flashdata('success') ?>
-									</div>
+										<div class="alert alert-success">
+											<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+											<?= $this->session->flashdata('success') ?>
+										</div>
 									<?php endif; ?>
 
-									<?php echo form_open(base_url('auth/login'), 'class="user" '); ?>
+									<?php echo form_open(base_url('auth/login/' . $ref), 'class="user" '); ?>
 
 
 									<div class="form-group">
-										<input type="username" name="username" class="form-control form-control-user"
-											id="username" aria-describedby="username"
-											placeholder="Nomor Mahasiswa (NIM)">
+										<input type="username" name="username" class="form-control form-control-user" id="username" aria-describedby="username" placeholder="<?= (!$ref) ? "Email UMY" : "Username"; ?>">
 									</div>
 									<div class="form-group">
-										<input type="password" name="password" class="form-control form-control-user"
-											id="password" placeholder="Password">
+										<input type="password" name="password" class="form-control form-control-user" id="password" placeholder="Password">
 									</div>
-								
-									<input type="submit" name="submit" class="btn btn-danger btn-user btn-block">
-									
+
+									<input type="submit" name="submit" class="btn btn-danger btn-user btn-block" value="Login">
+
 									<hr>
 
 									<?php echo form_close(); ?>
 									<hr>
-									<div class="text-center">
-										<a class="small" href="forgot-password.html">Forgot Password?</a>
-									</div>
-									<div class="text-center">
-										<a class="small" href="register.html">Create an Account!</a>
-									</div>
+
+
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
 
+					</div>
+
+				</div>
+				<div class="text-center">
+					<a class="small" href="<?= base_url('auth/login/non-sso'); ?>"><i class="fa fa-lock"></i></a>
+				</div>
 			</div>
 
 		</div>

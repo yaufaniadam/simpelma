@@ -31,7 +31,7 @@
 	<script src="<?= base_url() ?>public/vendor/jquery-easing/jquery.easing.min.js"></script>
 </head>
 
-<body id="page-top">
+<body id="page-top" class="sidebar-toggled sidenav-toggled">
 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
@@ -117,8 +117,23 @@
 		});
 
 		var table = $('#datatable').DataTable();
-		$('#selectload').on('change', function(){
-		table.columns(2).search( this.value ).draw();
+		$('#selectload').on('change', function() {
+			table.columns(2).search(this.value).draw();
+		});
+
+		$(document).ready(function() {
+			$('#datatable-desc').DataTable({
+				"order": [
+					[1, "desc"]
+				]
+			});
+		});
+		$(document).ready(function() {
+			$('#surat-desc').DataTable({
+				"order": [
+					[3, "desc"]
+				]
+			});
 		});
 	</script>
 
@@ -143,7 +158,7 @@
 	<script src="<?= base_url() ?>/public/vendor/summernote/summernote-bs4.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('#summernote').summernote({
+			$('.textarea-summernote').summernote({
 				tabsize: 2,
 				height: 320,
 				toolbar: [
@@ -155,6 +170,8 @@
 					['view', ['fullscreen', 'codeview', 'help']]
 				]
 			});
+
+
 		});
 
 		$(function() {
@@ -166,4 +183,5 @@
 
 </html>
 
-<script src="<?= base_url() ?>public/dist/js/sb-admin-2.min.js"></script>
+
+<script src="<?= base_url() ?>public/dist/js/sb-admin-2.js"></script>

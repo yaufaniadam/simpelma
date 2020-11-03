@@ -33,6 +33,8 @@
 				<input class="btn btn-lg btn-success btn-block" type="submit" name="submit" value="Ajukan Surat <?= $surat['kategori_surat']; ?>" />
 				<?php echo form_close(); ?>
 			</div>
+
+
 		</div>
 	</div>
 
@@ -50,7 +52,7 @@
 
 	<!-- /.col -->
 	<div class="col-4">
-		
+
 		<div class="card">
 			<div class="card-header py-3">
 				Status Surat

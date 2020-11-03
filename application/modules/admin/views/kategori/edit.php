@@ -11,9 +11,16 @@
 				<?= $this->session->flashdata('msg'); ?>
 			</div>
 		<?php endif; ?>
+		<?php if (isset($msg) || validation_errors() !== '') : ?>
+			<div class="alert alert-danger alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				<h4><i class="fa fa-exclamation"></i> Terjadi Kesalahan</h4>
+				<?= validation_errors(); ?>
+				<?= isset($msg) ? $msg : ''; ?>
+			</div>
+		<?php endif; ?>
 
 	</div>
-
 
 	<div class="col-md-8">
 		<div class="card card-success card-outline">
@@ -43,25 +50,24 @@
 					<label for="kode" class="col-md-3 control-label">Pengguna</label>
 					<div class="col-md-9">
 						<select name="klien" class="form-control">
-							<option <?php echo  set_select('klien', '', TRUE); ?>>Pilih Pengguna</option>
+							<option value="" <?php echo  set_select('klien', '', TRUE); ?>>Pilih Pengguna</option>
 							<option value="m" <?= (validation_errors()) ? set_select('klien', 'm') : "";
-												echo ($kat['klien'] == 'm') ? "selected" : ""; ?>>
+																echo ($kat['klien'] == 'm') ? "selected" : ""; ?>>
 								Mahasiswa</option>
 							<option value="d" <?= (validation_errors()) ? set_select('klien', 'd') : "";
-												echo ($kat['klien'] == 'd') ? "selected" : ""; ?>>
+																echo ($kat['klien'] == 'd') ? "selected" : ""; ?>>
 								Dosen</option>
 							<option value="p" <?= (validation_errors()) ? set_select('klien', 'p') : "";
-												echo ($kat['klien'] == 'p') ? "selected" : ""; ?>>
+																echo ($kat['klien'] == 'p') ? "selected" : ""; ?>>
 								Prodi</option>
 							<option value="u" <?= (validation_errors()) ? set_select('klien', 'u') : "";
-												echo ($kat['klien'] == 'u') ? "selected" : ""; ?>>
+																echo ($kat['klien'] == 'u') ? "selected" : ""; ?>>
 								Dosen</option>
 							<option value="i" <?= (validation_errors()) ? set_select('klien', 'i') : "";
-												echo ($kat['klien'] == 'i') ? "selected" : ""; ?>>
+																echo ($kat['klien'] == 'i') ? "selected" : ""; ?>>
 								Internal PPs</option>
-
-							<span class="invalid-feedback"><?php echo form_error('klien'); ?></span>
 						</select>
+						<span class="text-danger" style="font-size: 80%;"><?php echo form_error('klien'); ?></span>
 					</div>
 				</div>
 
@@ -69,10 +75,37 @@
 					<label for="deskripsi" class="col-md-3 control-label">Deskripsi</label>
 					<div class="col-md-9">
 
-						<div class="<?= (form_error('deskripsinya')) ? 'summernote-is-invalid' : ''; ?>"><textarea name="deskripsinya" id="summernote"><?= (validation_errors()) ? set_value('deskripsinya') : $kat['deskripsi'];  ?></textarea>
+						<div class="<?= (form_error('deskripsinya')) ? 'summernote-is-invalid' : ''; ?>"><textarea name="deskripsinya" class="textarea-summernote"><?= (validation_errors()) ? set_value('deskripsinya') : $kat['deskripsi'];  ?></textarea>
 						</div>
 
 						<span class="text-danger" style="font-size: 80%;"><?php echo form_error('deskripsinya'); ?></span>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="deskripsi" class="col-md-3 control-label">Tujuan Surat</label>
+					<div class="col-md-9">
+
+						<div class="<?= (form_error('tujuan_surat')) ? 'summernote-is-invalid' : ''; ?>"><textarea name="tujuan_surat" class="textarea-summernote"><?= (validation_errors()) ? set_value('tujuan_surat') : $kat['tujuan_surat'];  ?></textarea>
+						</div>
+
+						<span class="text-danger" style="font-size: 80%;"><?php echo form_error('tujuan_surat'); ?></span>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="template" class="col-md-3 control-label">Template surat</label>
+					<div class="col-md-9">
+						<select name="template" class="form-control">
+							<option value="" <?php echo  set_select('template', '', TRUE); ?>>Pilih Template</option>
+
+							<?php foreach ($template as $tpl) { ?>
+								<option value="<?= $tpl; ?>" <?= (validation_errors()) ? set_select('template', $kat['template']) : "";
+																							echo ($kat['template'] == $tpl) ? "selected" : ""; ?>>
+									<?= $tpl; ?></option>
+							<?php } ?>
+						</select>
+						<span class="text-danger" style="font-size: 80%;"><?php echo form_error('template'); ?></span>
 					</div>
 				</div>
 
@@ -99,7 +132,7 @@
 
 					foreach ($keterangan_surat as $row) { ?>
 						<li class="list-group-item <?= (form_error('kat_keterangan_surat[]')) ? 'is-eror' : ''; ?>
-						<?= (validation_errors()) ? '' : (in_array($row['id'], $explode)) ? 'active' : ''; ?>">
+						<?= ((validation_errors()) ? '' : (in_array($row['id'], $explode))) ? 'active' : ''; ?>">
 							<input class="checkbox_keterangan_surat" type="checkbox" value="<?= $row['id']; ?>" name="kat_keterangan_surat[]" <?php $check = (in_array($row['id'], $explode)) ? 'checked' : ''; ?> <?= (validation_errors()) ? set_checkbox('kat_keterangan_surat[]', $row['id']) : $check; ?> />
 							<?= $row['kat_keterangan_surat']; ?>
 						</li>

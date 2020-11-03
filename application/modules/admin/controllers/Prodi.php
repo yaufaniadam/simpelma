@@ -70,6 +70,3 @@ class Prodi extends MY_Controller
 
 	
 }
-
-
-?>

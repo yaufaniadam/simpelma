@@ -64,9 +64,9 @@
 
 					foreach ($admin_prodi as $admin) { ?>
 						<li class="list-group-item <?= (form_error('admin_prodi[]')) ? 'is-eror' : ''; ?> 
-						<?= (validation_errors()) ? '' : (in_array($admin['id'], $explode)) ? 'active' : ''; ?>">
+						<?= ((validation_errors()) ? '' : (in_array($admin['id'], $explode))) ? 'active' : ''; ?>">
 							<input class="checkbox_admin_prodi" type="checkbox" value="<?= $admin['id']; ?>" name="admin_prodi[]" <?php $check = (in_array($admin['id'], $explode)) ? 'checked' : ''; ?> <?= (validation_errors()) ? set_checkbox('admin_prodi[]', $admin['id']) : $check; ?> />
-							<?= $admin['nama']; ?>
+							<?= $admin['fullname']; ?>
 						</li>
 					<?php } // endforeach 
 					?>
@@ -87,9 +87,9 @@
 
 					foreach ($ka_prodi as $ka_prodi) { ?>
 						<li class="list-group-item <?= (form_error('ka_prodi[]')) ? 'is-eror' : ''; ?> 
-						<?= (validation_errors()) ? '' : (in_array($ka_prodi['id'], $explode)) ? 'active' : ''; ?>">
+						<?= ((validation_errors()) ? '' : (in_array($ka_prodi['id'], $explode))) ? 'active' : ''; ?>">
 							<input class="checkbox_admin_prodi" type="checkbox" value="<?= $ka_prodi['id']; ?>" name="ka_prodi[]" <?php $check = (in_array($ka_prodi['id'], $explode)) ? 'checked' : ''; ?> <?= (validation_errors()) ? set_checkbox('ka_prodi[]', $ka_prodi['id']) : $check; ?> />
-							<?= $ka_prodi['nama']; ?>
+							<?= $ka_prodi['fullname']; ?>
 						</li>
 					<?php } // endforeach 
 					?>

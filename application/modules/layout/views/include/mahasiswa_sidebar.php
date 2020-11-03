@@ -1,8 +1,8 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion toggled" id="accordionSidebar">
 
 	<!-- Sidebar - Brand -->
-	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+	<a class="sidebar-brand d-flex align-items-center justify-content-center toggledd" href="<?= base_url("mahasiswa/surat"); ?>">
 		<div class="sidebar-brand-icon">
 			<img src="<?= base_url() ?>public/dist/img/logo.png" width="40px" height="" />
 		</div>
@@ -14,13 +14,13 @@
 
 	<!-- Nav Item - Dashboard
 	<li class="nav-item" id="menu_dashboard">
-		<a class="nav-link" href="<?=base_url("admin/dashboard"); ?>">
+		<a class="nav-link" href="<?= base_url("admin/dashboard"); ?>">
 			<i class="fas fa-fw fa-tachometer-alt"></i>
 			<span>Dashboard</span></a>
 	</li> -->
-	<a class="btn btn-ijomuda p-2 mx-3 my-4" style="border-radius:30px;" href="<?=base_url("mahasiswa/surat/ajukan"); ?>"><i class="fas fa-fw fa-plus"></i> Surat Baru</a>
+
 	<li class="nav-item" id="menu_surat">
-		<a class="nav-link" href="<?=base_url("mahasiswa/surat"); ?>">
+		<a class="nav-link" href="<?= base_url("mahasiswa/surat"); ?>">
 			<i class="fas fa-fw fa-envelope"></i>
 			<span>Surat Saya</span></a>
 	</li>
@@ -31,7 +31,7 @@
 	</div>
 -->
 
-	
+
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">

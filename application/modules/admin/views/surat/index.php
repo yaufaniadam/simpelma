@@ -2,20 +2,21 @@
 	<div class="col-12">
 
 		<div class="card card-success card-outline">
-			<div class="card-header">Filter : 
-			
-					<a href="">Semua</a> | 
-					<a href="">Perlu Diproses <span class="badge badge-danger">12</span></a> |
-					<a href="">Telah Terbit</a>
-				
+			<div class="card-header">
+				<a class="nav-s text-danger" href="<?= base_url("admin/surat/index/" . $this->session->userdata('role')); ?>">
+					<i class="fas fa-fw fa-exclamation-circle"></i> Tampilkan yang perlu diproses</a>
+				</a>&nbsp;
+				<a class=" nav-lilk" href="<?= base_url("admin/surat/index/"); ?>">
+					<i class="fas fa-fw fa-envelope"></i> Tampilkan semua surat</a>
 			</div>
 			<div class="card-body">
 				<?php
 				if ($query) {  ?>
-					<table id="surat" class="table table-bordered tb-surat">
+					<table id="surat-desc" class="table table-bordered tb-surats">
 						<thead>
 							<tr>
-								<th>Perihal</th>
+								<th style="width:50%">Perihal</th>
+								<th style="width:20%">Status</th>
 								<th>Mahasiswa</th>
 								<th>Tanggal</th>
 							</tr>
@@ -24,12 +25,12 @@
 							<?php
 							foreach ($query as $surat) {  ?>
 								<tr class="<?= ($surat['id_status'] == 2) ? 'proses' : ''; ?> <?= ($surat['id_status'] == 4) ? 'perlu-revisi' : ''; ?>">
-									<td><a class="judul" href="<?= base_url('admin/surat/detail/' . $surat['id_surat']); ?>"><?= $surat['kategori_surat']; ?></a> <?php echo badge_status($surat['id_status']); ?>
-									<br />
-									<?= ($surat['id_status']== 4) ? "<span class='badge badge-danger'><i class='fas fa-exclamation-triangle'></i> Persyaratan perlu diperbaiki</span>" : ""; ?>
-								</td>
 									<td>
-										<p class="m-0"><?= $surat['nama']; ?></p>
+										<a class="judul" href="<?= base_url('admin/surat/detail/' . $surat['id_surat']); ?>"><?= $surat['kategori_surat']; ?></a>
+									</td>
+									<td class="table-<?= $surat['badge']; ?>"><?php echo $surat['id_status']; ?> - <?php echo $surat['status']; ?></td>
+									<td>
+										<p class="m-0"><?= $surat['fullname']; ?></p>
 										<p class="badge m-0 badge-ijomuda"><?= $surat['prodi']; ?></p>
 									</td>
 									<td>
@@ -44,7 +45,7 @@
 					</table>
 				<?php } else { ?>
 
-					<p class="lead">Belum ada Surat</p>
+					<p class="lead">Saat ini belum ada surat yang perlu diproses</p>
 
 				<?php }
 				?>
@@ -79,12 +80,26 @@
 </div>
 <!-- /.modal -->
 
+
+
 <!-- DataTables -->
 <script src="<?= base_url() ?>/public/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <script>
-	$('#surat').dataTable({
-		"ordering": false
+	$(document).ready(function() {
+		$('#surat').DataTable({
+
+			<?php if ($this->session->userdata('role') == 1) { ?> "order": [
+					[1, "asc"]
+				]
+			<?php } ?>
+			<?php if ($this->session->userdata('role') == 5) { ?> "order": [
+					[1, "desc"]
+				]
+			<?php } ?>
+
+
+		});
 	});
 </script>

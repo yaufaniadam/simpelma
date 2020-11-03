@@ -1,30 +1,13 @@
-<!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="box box-body">
-            <div class="col-md-12">
-              <h4><i class="fa fa-warning"></i> &nbsp; Error!</h4>
-            </div>           
-          </div>
-        </div>
-      </div>      
+<div class="error-page">
+  <h2 class="headline text-danger"><i class="fas fa-exclamation-triangle text-danger"></i></h2>
 
-      <!-- Info boxes -->
-      <div class="row">
-        <div class="col-md-12">
+  <div class="error-content">
+    <h3> Oops! Anda tidak memiliki akses pada halaman ini.</h3>
 
-          <h4><?=$error; ?></h4>
-           
-          </div>         
-        </div>
+    <p>
+      Silakan memilih menu lainnya.
+    </p>
 
-       
-      </div>
-      <!-- /.row -->
 
-     
-
-     
-    </section>
- 
+  </div>
+</div>

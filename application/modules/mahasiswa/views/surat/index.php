@@ -2,7 +2,7 @@
 	<div class="col-12">
 
 		<div class="card card-success card-outline">
-			
+
 			<div class="card-body box-profile">
 				<?php
 				if ($query) {  ?>
@@ -35,7 +35,7 @@
 								</tr>
 							<?php }   ?>
 						</tbody>
-						
+
 					</table>
 				<?php } else { ?>
 
