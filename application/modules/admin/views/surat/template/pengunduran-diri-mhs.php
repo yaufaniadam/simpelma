@@ -1,7 +1,7 @@
 <div class="kertas">
-  <table>
+  <table style="width:100%">
     <tr>
-      <td width="70%">
+      <td width="60%">
         <table style="width: 100%;">
           <tr>
             <td width="15%">Nomor</td>

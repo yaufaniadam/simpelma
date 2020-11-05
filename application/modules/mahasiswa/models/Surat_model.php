@@ -31,7 +31,8 @@ class Surat_model extends CI_Model
         u.id_prodi, 
         pr.prodi, 
         u.fullname, 
-        u.username 
+        u.username,
+        n.id as id_notif
         FROM 
         surat s
         LEFT JOIN users u ON u.id = s.id_mahasiswa        
@@ -39,6 +40,7 @@ class Surat_model extends CI_Model
         LEFT JOIN status st ON st.id = ss.id_status
         LEFT JOIN prodi pr ON pr.id = u.id_prodi    
         LEFT JOIN kategori_surat k ON k.id = s.id_kategori_surat
+        LEFT JOIN notif n ON n.id_surat = s.id
         WHERE 
         s.id = '$id_surat' 
         AND 
@@ -70,8 +72,8 @@ class Surat_model extends CI_Model
     */
     public function get_kategori_surat()
     {
-        echo $aktif = $_SESSION['aktif'];
-        echo  $prodi = $_SESSION['id_prodi'];
+        $aktif = $_SESSION['aktif'];
+        $prodi = $_SESSION['id_prodi'];
 
         $query = $this->db->query("SELECT * FROM kategori_surat 
         WHERE (klien='m' AND aktif ='$aktif' AND prodi = '$prodi')

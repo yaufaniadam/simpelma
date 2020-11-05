@@ -16,7 +16,7 @@ class Prodi_model extends CI_Model
 
     public function get_admin_prodi($id_prodi, $role)
     {
-        $query = $this->db->query("SELECT users.* FROM users WHERE users.role=$role");
+        $query = $this->db->query("SELECT users.* FROM users WHERE users.role=$role AND id_prodi = $id_prodi");
         return $result = $query->result_array();
     }
 

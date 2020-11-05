@@ -39,11 +39,10 @@
 						<p class="alert alert-warning mb-4"><?php tampil_alert(); ?></p>
 					<?php } */ ?>
 
-					<?php tampil_alert($surat['id_status']); ?>
-
 					<?php echo form_open(base_url('mahasiswa/surat/tambah/' . $surat['id']), '') ?>
 
 					<input type="hidden" name="id_surat" value="<?= $surat['id']; ?>">
+					<input type="hidden" name="id_notif" value="<?= $surat['id_notif']; ?>">
 					<?php $ket_surat = explode(',', $surat['kat_keterangan_surat']);
 
 					foreach ($ket_surat as $ket_surat => $value) {

@@ -10,7 +10,7 @@
 				<?= $this->session->flashdata('msg'); ?>
 			</div>
 		<?php endif; ?>
-
+		<!-- Surat diproses oleh Kaprodi -->
 		<?php if (($surat['id_status'] == 3 || $surat['id_status'] == 7) && $this->session->userdata('role') == 6) { ?>
 
 			<div class="card shadow mb-3">
@@ -46,6 +46,7 @@
 			</div>
 		<?php } ?>
 
+		<!-- Surat diproses oleh Direktur Pasca -->
 		<?php if (($surat['id_status'] == 8) && $this->session->userdata('role') == 5) { ?>
 
 			<div class="card shadow mb-3">
@@ -93,9 +94,9 @@
 			<a href="#collKeterangan" class="d-block card-header pt-3 pb-2 bg-abumuda <?= (($surat['id_status'] == 9 || $surat['id_status'] == 10) && $this->session->userdata('role') == 1) ? "collapsed" : "" ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collKeterangan">
 				<p class="h6 font-weight-bold text-white">Keterangan</p>
 			</a>
-			<div class="collapse<?= (($surat['id_status'] == 9 || $surat['id_status'] == 10)) ? "" : " show" ?>" id="collKeterangan">
+			<div class="collapse<?= (($surat['id_status'] == 9 || $surat['id_status'] == 10) && $this->session->userdata('role') == 1) ? "" : " show" ?>" id="collKeterangan">
 				<div class="card-body">
-					<?php tampil_alert($surat['id_status']); ?>
+
 					<?php
 					if (
 						($surat['id_status'] == 8 && $this->session->userdata('role') == 5) ||
@@ -111,6 +112,7 @@
 					<?= ($surat['id_status'] == 1) ? '<a href="' . base_url('admin/surat/proses_surat/' . $surat['id']) . '" class="btn btn-warning btn-sm">Klik untuk Memproses</a>' : '' ?>
 
 					<input type="hidden" name="id_surat" value="<?= $surat['id']; ?>">
+					<input type="hidden" name="id_notif" value="<?= $surat['id_notif']; ?>">
 					<?php $ket_surat = explode(',', $surat['kat_keterangan_surat']); ?>
 
 					<input type="hidden" name="sizeof_ket_surat" value="<?= sizeof($ket_surat); ?>">
@@ -293,7 +295,6 @@
 						</script>
 
 					<?php }
-
 					form_close(); ?>
 				</div>
 			</div>
@@ -311,13 +312,11 @@
 						<p>Lakukan pengaturan di bawah ini sebelum surat diterbitkan</p>
 						<?php echo form_open('admin/surat/terbitkan_surat'); ?>
 
-
 						<div class="form-group row">
 							<label class="col-md-4" for="">Nomor Surat</label>
 							<div class="col-md-8">
 
 								<?php
-
 								$no_surat = $this->db->query("select max(no_surat) as last_no from no_surat where id_kategori_surat= " . $surat['id_kategori_surat'] . " AND YEAR(tanggal_terbit) =" . date('Y'))->row_array();
 
 								if ($no_surat['last_no'] > 0) {
@@ -325,8 +324,6 @@
 								} else {
 									$last_no = 1;
 								}
-
-
 								?>
 
 								<input type="hidden" name="id_surat" id="" value="<?= $surat['id']; ?>">
@@ -374,9 +371,11 @@
 						</div>
 
 						<div class="form-group row">
-							<label class="col-md-4" for="">Instansi/Lembaga Tujuan</label>
+							<label class="col-md-4" for="">Instansi/Lembaga Tujuan
+								<small id="emailHelp" class="form-text text-muted">Tujuan surat bisa diganti jika diperlukan.</small>
+							</label>
 							<div class="col-md-8">
-								<textarea name="instansi" id="" cols="30" rows="3" class="textarea-summernote"></textarea>
+								<textarea name="instansi" id="" cols="30" rows="3" class="textarea-summernote"><?= $surat['tujuan_surat']; ?></textarea>
 							</div>
 						</div>
 

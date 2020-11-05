@@ -267,7 +267,7 @@ function fileUploaderModal()
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer">
+				<div class="modal-footer"> <i class="fas fa-excla,ation-triangle"></i> Jika file tidak bisa diklik, klik tombol <strong>"Batal"</strong> lalu coba kembali.
 					<button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
 
 				</div>
@@ -786,12 +786,13 @@ function tampil_notif()
 <?php
 }
 
-function tampil_alert($status)
+function tampil_alert($status, $role)
 {
+
 	$CI = &get_instance();
 	$alert = $CI->db->select('s.*,sp.*')->from('status s')
 		->join('status_pesan sp', 's.id=sp.id_status', 'left')
-		->where('s.id =' . $status)->get()->row_array();
+		->where(array('s.id =' => $status, 'sp.role' => $role))->get()->row_array();
 ?>
 	<p class="alert alert-<?= $alert['badge']; ?> mb-4"><i class="<?= $alert['icon']; ?>"></i> <?= $alert['alert']; ?></p>
 <?php }

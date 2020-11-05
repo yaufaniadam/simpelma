@@ -37,13 +37,35 @@ class Surat_model extends CI_Model
 
     public function get_detail_surat($id_surat)
     {
-        $query = $this->db->query("SELECT s.id, s.id_kategori_surat, k.kategori_surat, k.klien, k.template, k.tujuan_surat, ss.id_status, st.status, st.badge, u.id as user_id, u.fullname,u.username,  k.kat_keterangan_surat, u.id_prodi, pr.prodi FROM surat s      
+        $role = $_SESSION['role'];
+
+        $query = $this->db->query("SELECT 
+        s.id, 
+        s.id_kategori_surat, 
+        k.kategori_surat, 
+        k.klien, 
+        k.template, 
+        k.tujuan_surat, 
+        ss.id_status, 
+        st.status, 
+        st.badge, 
+        u.id as user_id, 
+        u.fullname,
+        u.username,  
+        k.kat_keterangan_surat, 
+        u.id_prodi, 
+        pr.prodi,
+        n.id as id_notif
+        FROM surat s      
         LEFT JOIN surat_status ss ON ss.id_surat = s.id 
         LEFT JOIN users u ON u.id = s.id_mahasiswa 
         LEFT JOIN prodi pr ON pr.id = u.id_prodi              
         LEFT JOIN status st ON st.id = ss.id_status
         LEFT JOIN kategori_surat k ON k.id = s.id_kategori_surat
-        WHERE s.id = '$id_surat' AND ss.id_status= (SELECT MAX(id_status) FROM surat_status WHERE id_surat ='$id_surat')");
+        LEFT JOIN notif n ON n.id_surat = s.id
+        WHERE s.id = '$id_surat' AND ss.id_status = (SELECT MAX(id_status) FROM surat_status WHERE id_surat ='$id_surat')
+        
+        ");
         return $result = $query->row_array();
     }
 

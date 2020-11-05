@@ -36,10 +36,10 @@ class Surat extends Admin_Controller
 	}
 	public function proses_surat($id_surat = 0)
 	{
-		$this->db->set('id_status', 2);
-		$this->db->set('date', 'NOW()', FALSE);
-		$this->db->set('id_surat', $id_surat);
-		$this->db->insert('surat_status');
+		$this->db->set('id_status', 2)
+			->set('date', 'NOW()', FALSE)
+			->set('id_surat', $id_surat)
+			->insert('surat_status');
 
 		redirect(base_url('admin/surat/detail/' . $id_surat));
 	}
@@ -49,21 +49,23 @@ class Surat extends Admin_Controller
 
 			$verifikasi = $this->input->post('verifikasi'); //ambil nilai 
 			$id_surat = $this->input->post('id_surat');
-			$this->db->set('id_status', $this->input->post('rev2'));
-			$this->db->set('pic', $this->session->userdata('user_id'));
-			$this->db->set('date', 'NOW()', FALSE);
-			$this->db->set('id_surat', $id_surat);
-			$this->db->insert('surat_status');
+			$id_notif = $this->input->post('id_notif');
+			//set status
+			$this->db->set('id_status', $this->input->post('rev2'))
+				->set('pic', $this->session->userdata('user_id'))
+				->set('date', 'NOW()', FALSE)
+				->set('id_surat', $id_surat)
+				->insert('surat_status');
 
 			foreach ($verifikasi as $id => $value_verifikasi) {
 
-				$this->db->where(array('id_kat_keterangan_surat' => $id, 'id_surat' => $id_surat));
-				$this->db->update(
-					'keterangan_surat',
-					array(
-						'verifikasi' =>  $value_verifikasi,
-					)
-				);
+				$this->db->where(array('id_kat_keterangan_surat' => $id, 'id_surat' => $id_surat))
+					->update(
+						'keterangan_surat',
+						array(
+							'verifikasi' =>  $value_verifikasi,
+						)
+					);
 			}
 
 			if ($this->input->post('rev2') == 6) {
@@ -74,12 +76,19 @@ class Surat extends Admin_Controller
 				$role = array(3, 6);
 			}
 
+			// buat notifikasi
 			$data_notif = array(
 				'id_surat' => $id_surat,
 				'id_status' => $this->input->post('rev2'),
 				'kepada' => $this->input->post('user_id'),
 				'role' => $role
 			);
+
+			// hapus notifikasi "menunggu verifikasi"
+			$set_notif = $this->db->set('status', 1)
+				->set('dibaca', 'NOW()', FALSE)
+				->where(array('id' => $id_notif, 'status' => 0))
+				->update('notif');
 
 			$result = $this->notif_model->send_notif($data_notif);
 
@@ -137,6 +146,7 @@ class Surat extends Admin_Controller
 						'role' => array(3, 5)
 					);
 
+
 					$result = $this->notif_model->send_notif($data_notif);
 					$this->session->set_flashdata('msg', 'Surat sudah diberi persetujuan oleh Kaprodi!');
 					redirect(base_url('admin/surat/detail/' . $id_surat));
@@ -185,14 +195,42 @@ class Surat extends Admin_Controller
 
 	public function tampil_surat($id_surat)
 	{
-		$surat = $this->surat_model->get_detail_surat($id_surat);
-		$no_surat = $this->surat_model->get_no_surat($id_surat);
 
 		$data['title'] = 'Tampil Surat';
-		$data['surat'] = $surat;
-		$data['no_surat'] = $no_surat;
-		$data['view'] = 'surat/tampil_surat.php';
-		$this->load->view('layout/layout', $data);
+		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
+		$data['no_surat'] = $this->surat_model->get_no_surat($id_surat);
+		$kategori = $data['surat']['kategori_surat'];
+		$nim = $data['surat']['username'];
+
+		//$this->load->view('admin/surat/tampil_surat', $data);
+
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => __DIR__ . '/pdfdata',
+			'mode' => 'utf-8',
+			// 'format' => [24, 24],
+			'format' => 'A4',
+			'margin_left' => 0,
+			'margin_right' => 0,
+			'margin_bottom' => 20,
+			'margin_top' => 30,
+			'float' => 'left'
+		]);
+
+		$view = $this->load->view('admin/surat/tampil_surat', $data, TRUE);
+
+		$mpdf->SetHTMLHeader('
+		<div style="text-align: left; margin-left:2cm">
+				<img width="390" height="" src="' . base_url() . '/public/dist/img/logokop-pasca.jpg" />
+		</div>');
+		$mpdf->SetHTMLFooter('
+
+		<div style="text-align:center; background:red;">
+			<img width="" height="" src="' . base_url() . '/public/dist/img/footerkop-pasca.jpg" />
+		</div>');
+
+		$mpdf->WriteHTML($view);
+
+		$mpdf->Output('Surat-' . $kategori . '-' . $nim . '.pdf', 'D');
 	}
 
 	public function get_tujuan_surat()

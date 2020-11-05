@@ -25,10 +25,6 @@ class Surat extends Mahasiswa_Controller
 
 	public function ajukan($id_kategori = 0)
 	{
-
-		echo '<pre>';
-		print_r($_SESSION['aktif']);
-		echo '</pre>';
 		$data['kategori_surat'] = $this->surat_model->get_kategori_surat();
 		$data['title'] = 'Ajukan Surat';
 		$data['view'] = 'surat/ajukan';
@@ -90,6 +86,7 @@ class Surat extends Mahasiswa_Controller
 
 	public function tambah($id_surat = 0)
 	{
+		$id_notif = $this->input->post('id_notif');
 
 		if ($this->input->post('submit')) {
 			// validasi form, form ini digenerate secara otomatis
@@ -139,6 +136,8 @@ class Surat extends Mahasiswa_Controller
 						);
 					}
 
+
+					// kirim notifikasi
 					$data_notif = array(
 						'id_surat' => $id_surat,
 						'id_status' => 2,
@@ -146,9 +145,18 @@ class Surat extends Mahasiswa_Controller
 						'role' => array(2, 3)
 					);
 
-					$results = $this->notif_model->send_notif($data_notif);
+					$this->notif_model->send_notif($data_notif);
+
+					// hapus notifikasi "Lengkapi dokumen"
+					$set_status = $this->db->set('status', 1)
+						->set('dibaca', 'NOW()', FALSE)
+						->where(array('id' => $id_notif, 'status' => 0))
+						->update('notif');
+
+					if ($set_status) {
+						redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
+					}
 				}
-				redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
 			}
 		} else {
 			$data['kategori_surat'] = $this->surat_model->get_kategori_surat('m');
@@ -239,14 +247,41 @@ class Surat extends Mahasiswa_Controller
 
 	public function tampil_surat($id_surat)
 	{
-		$surat = $this->surat_model->get_detail_surat($id_surat);
-		$no_surat = $this->surat_model->get_no_surat($id_surat);
-
 		$data['title'] = 'Tampil Surat';
-		$data['surat'] = $surat;
-		$data['no_surat'] = $no_surat;
-		$data['view'] = 'admin/surat/tampil_surat.php';
-		$this->load->view('layout/layout', $data);
+		$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
+		$data['no_surat'] = $this->surat_model->get_no_surat($id_surat);
+		$kategori = $data['surat']['kategori_surat'];
+		$nim = $data['surat']['username'];
+
+		//$this->load->view('admin/surat/tampil_surat', $data);
+
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => __DIR__ . '/pdfdata',
+			'mode' => 'utf-8',
+			// 'format' => [24, 24],
+			'format' => 'A4',
+			'margin_left' => 0,
+			'margin_right' => 0,
+			'margin_bottom' => 20,
+			'margin_top' => 30,
+			'float' => 'left'
+		]);
+
+		$view = $this->load->view('admin/surat/tampil_surat', $data, TRUE);
+
+		$mpdf->SetHTMLHeader('
+		<div style="text-align: left; margin-left:2cm">
+				<img width="390" height="" src="' . base_url() . '/public/dist/img/logokop-pasca.jpg" />
+		</div>');
+		$mpdf->SetHTMLFooter('
+
+		<div style="text-align:center; background:red;">
+			<img width="" height="" src="' . base_url() . '/public/dist/img/footerkop-pasca.jpg" />
+		</div>');
+
+		$mpdf->WriteHTML($view);
+
+		$mpdf->Output('Surat-' . $kategori . '-' . $nim . '.pdf', 'D');
 	}
 
 	function _create_thumbs($upload_data)

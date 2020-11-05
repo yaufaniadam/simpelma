@@ -1,44 +1,53 @@
-<div class="card card-success card-outline">
-    <div class="card-header py-3">
-        <button class="btn btn-success" type='button' id='btn' onclick='printDiv();'><i class="fas fa-print"></i> Print</button>
-    </div>
-    <div class="card-body box-profile">
-        <div id='DivIdToPrint'>
-            <?php
+<html>
 
-            $file = FCPATH . 'application/modules/admin/views/surat/template/' . $surat['template'];
+<head>
+    <title><?= $surat['kategori_surat'] ?></title>
+    <style>
+        div.kertas {
+            width: 100%;
+            height: 100%;
+        }
 
-            if ($surat['template']) {
+        table td {
+            line-height: 1.2;
+            font-size: 10pt;
+        }
 
-                if (file_exists($file)) {
-                    include $file;
-                } else {
-                    echo "template tidak tersedia. Hubungi admin.";
-                }
+        table.nama {
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.5;
+            font-size: 10pt;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 15px;
+        }
+
+        ol li {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="margin:4cm 2.5cm 4cm 2.5cm;">
+        <?php
+        $file = FCPATH . 'application/modules/admin/views/surat/template/' . $surat['template'];
+        if ($surat['template']) {
+            if (file_exists($file)) {
+                include $file;
             } else {
-                echo "template belum diset. Hubungi admin.";
-            } ?>
-        </div>
+                echo "template tidak tersedia. Hubungi admin.";
+            }
+        } else {
+            echo "template belum diset. Hubungi admin.";
+        }
+        ?>
+
     </div>
-</div>
 
+</body>
 
-<script>
-    function printDiv() {
-
-        var divToPrint = document.getElementById('DivIdToPrint');
-
-        var newWin = window.open('', 'Print-Window');
-
-        newWin.document.open();
-
-        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
-
-        newWin.document.close();
-
-        setTimeout(function() {
-            newWin.close();
-        }, 10);
-
-    }
-</script>
+</html>

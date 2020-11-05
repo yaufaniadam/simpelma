@@ -82,14 +82,12 @@ class Pengguna extends Admin_Controller
 		}
 	}
 
-
-
 	public function edit($id = 0)
 	{
 		if ($this->input->post('submit')) {
 
 			$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
-			//	$this->form_validation->set_rules('mobile_no', 'Number', 'trim|required');
+			$this->form_validation->set_rules('nama', 'Nama Lengkap', 'trim|required');
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['user'] = $this->pengguna_model->get_user_by_id($id);
@@ -101,6 +99,7 @@ class Pengguna extends Admin_Controller
 				$data = array(
 					'email' => $this->input->post('email'),
 					'role' => $this->input->post('role'),
+					'fullname' => $this->input->post('nama'),
 					'password' => ($this->input->post('password') !== "" ? password_hash($this->input->post('password'), PASSWORD_BCRYPT) : $this->input->post('password_hidden')),
 					'updated_at' => date('Y-m-d : h:m:s'),
 				);
