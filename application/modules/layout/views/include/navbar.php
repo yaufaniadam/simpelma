@@ -10,6 +10,9 @@
   <?php if ($_SESSION['role'] == 3) { ?>
     <a class="btn btn-md btn-ijomuda p-2 mx-3 my-4" style="border-radius:30px;" href="<?= base_url("mahasiswa/surat/ajukan"); ?>"><i class="fas fa-fw fa-plus"></i> Surat Baru</a>
   <?php } ?>
+  <?php if ($_SESSION['role'] == 1) { ?>
+    <a class="btn btn-md btn-ijomuda p-2 mx-3 my-4" style="border-radius:30px;" href="<?= base_url("admin/surat/ajukan"); ?>"><i class="fas fa-fw fa-plus"></i> Surat Baru</a>
+  <?php } ?>
 
   <!-- Topbar Navbar -->
   <ul class="navbar-nav ml-auto">

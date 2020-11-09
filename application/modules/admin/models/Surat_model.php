@@ -80,9 +80,16 @@ class Surat_model extends CI_Model
 
         return $no_surat;
     }
-    public function get_kategori_surat()
+    public function get_kategori_surat($klien)
     {
-        $query = $this->db->query("SELECT * FROM kategori_surat");
+
+        $prodi = $_SESSION['id_prodi'];
+
+        $query = $this->db->query("SELECT * FROM kategori_surat 
+        WHERE klien='$klien'
+        ");
+
+
         return $result = $query->result_array();
     }
     public function get_kategori_surat_byid($id)

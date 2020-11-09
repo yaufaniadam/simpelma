@@ -159,37 +159,87 @@ class Surat extends Admin_Controller
 	{
 		if ($this->input->post('submit')) {
 			$id_surat = $this->input->post('id_surat');
-			$data = array(
-				'id_surat' => $id_surat,
-				'id_kategori_surat' => $this->input->post('id_kategori_surat'),
-				'no_surat' => $this->input->post('no_surat'),
-				'kat_tujuan_surat' => $this->input->post('kat_tujuan_surat'),
-				'tujuan_surat' => $this->input->post('tujuan_surat'),
-				'urusan_surat' => $this->input->post('urusan_surat'),
-				'instansi' => $this->input->post('instansi'),
-				'tanggal_terbit' => date('Y-m-d'),
+
+			$this->form_validation->set_rules(
+				'no_surat',
+				'Nomor Surat',
+				'trim|required',
+				array('required' => '%s wajib diisi.')
+			);
+			$this->form_validation->set_rules(
+				'kat_tujuan_surat',
+				'Kategori Tujuan Surat',
+				'trim|required',
+				array('required' => '%s wajib diisi.')
+			);
+			$this->form_validation->set_rules(
+				'tujuan_surat',
+				'Tujuan Surat',
+				'trim|required',
+				array('required' => '%s wajib diisi.')
+			);
+			$this->form_validation->set_rules(
+				'urusan_surat',
+				'Urusan Surat',
+				'trim|required',
+				array('required' => '%s wajib diisi.')
+			);
+			$this->form_validation->set_rules(
+				'instansi',
+				'Instansi',
+				'trim|required',
+				array('required' => '%s wajib diisi.')
 			);
 
-			$insert = $this->db->insert('no_surat', $data);
-			if ($insert) {
-				$this->db->set('id_status', 10)
-					->set('date', 'NOW()', FALSE)
-					->set('id_surat', $id_surat)
-					->set('pic', $this->session->userdata('user_id'))
-					->insert('surat_status');
+			if ($this->form_validation->run() == FALSE) {
+				$data['status'] = $this->surat_model->get_surat_status($id_surat);
+				$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
+				$data['timeline'] = $this->surat_model->get_timeline($id_surat);
 
-				$data_notif = array(
+				$data['title'] = 'Detail Surat';
+				$data['view'] = 'surat/detail';
+				$this->load->view('layout/layout', $data);
+			} else {
+				$data = array(
 					'id_surat' => $id_surat,
-					'id_status' => 10,
-					'kepada' => $this->input->post('user_id'),
-					'role' => array(3, 1, 2, 5, 6)
+					'id_kategori_surat' => $this->input->post('id_kategori_surat'),
+					'no_surat' => $this->input->post('no_surat'),
+					'kat_tujuan_surat' => $this->input->post('kat_tujuan_surat'),
+					'tujuan_surat' => $this->input->post('tujuan_surat'),
+					'urusan_surat' => $this->input->post('urusan_surat'),
+					'instansi' => $this->input->post('instansi'),
+					'tanggal_terbit' => date('Y-m-d'),
 				);
 
-				$result = $this->notif_model->send_notif($data_notif);
+				$insert = $this->db->insert('no_surat', $data);
+				if ($insert) {
+					$this->db->set('id_status', 10)
+						->set('date', 'NOW()', FALSE)
+						->set('id_surat', $id_surat)
+						->set('pic', $this->session->userdata('user_id'))
+						->insert('surat_status');
 
-				$this->session->set_flashdata('msg', 'Surat berhasil diterbitkan!');
-				redirect(base_url('admin/surat/detail/' . $id_surat));
+					$data_notif = array(
+						'id_surat' => $id_surat,
+						'id_status' => 10,
+						'kepada' => $this->input->post('user_id'),
+						'role' => array(3, 1, 2, 5, 6)
+					);
+
+					$result = $this->notif_model->send_notif($data_notif);
+
+					$this->session->set_flashdata('msg', 'Surat berhasil diterbitkan!');
+					redirect(base_url('admin/surat/detail/' . $id_surat));
+				}
 			}
+		} else {
+			$data['status'] = $this->surat_model->get_surat_status($id_surat);
+			$data['surat'] = $this->surat_model->get_detail_surat($id_surat);
+			$data['timeline'] = $this->surat_model->get_timeline($id_surat);
+
+			$data['title'] = 'Detail Surat';
+			$data['view'] = 'surat/detail';
+			$this->load->view('layout/layout', $data);
 		}
 	}
 
@@ -238,5 +288,71 @@ class Surat extends Admin_Controller
 		$kat_tujuan = $this->input->post('kat_tujuan_surat');
 		$data = $this->db->query("SELECT * FROM tujuan_surat WHERE id_kat_tujuan_surat = $kat_tujuan")->result_array();
 		echo json_encode($data);
+	}
+
+
+	public function ajukan($id_kategori = 0)
+	{
+		$data['kategori_surat'] = $this->surat_model->get_kategori_surat('p');
+		$data['title'] = 'Buat Surat';
+		$data['view'] = 'surat/ajukan';
+		$this->load->view('layout/layout', $data);
+	}
+
+	public function buat_surat($id)
+	{
+		$data = array(
+			'id_kategori_surat' => $id,
+			'id_mahasiswa' => $this->session->userdata('user_id'),
+		);
+
+		echo '<pre>';
+		print_r($data);
+		echo '</pre>';
+
+		$data = $this->security->xss_clean($data);
+		$result = $this->surat_model->tambah($data);
+		//ambil last id surat yg baru diinsert
+		$insert_id = $this->db->insert_id();
+		// set status surat
+		$this->db->set('id_surat', $insert_id)
+			->set('id_status', 1)
+			->set('pic', $this->session->userdata('user_id'))
+			->set('date', 'NOW()', FALSE)
+			->insert('surat_status');
+
+		// //ambil id surat berdasarkan last id status surat
+		// $insert_id2 = $this->db->select('id_surat')->from('surat_status')->where('id=', $this->db->insert_id())->get()->row_array();
+		// // ambil keterangan surat berdasar kategori surat
+		// $kat_surat = $this->db->select('kat_keterangan_surat')->from('kategori_surat')->where('id=', $id)->get()->row_array();
+
+		// // explode kterangan surat
+		// $kat_surat = explode(',', $kat_surat['kat_keterangan_surat']);
+
+		// // foreach keterangan surat, lalu masukkan nilai awal (nilai kosong) berdasakan keterangan dari kategori surat
+		// foreach ($kat_surat as $key => $id_kat) {
+		// 	$this->db->insert(
+		// 		'keterangan_surat',
+		// 		array(
+		// 			'value' => '',
+		// 			'id_surat' =>  $insert_id2['id_surat'],
+		// 			'id_kat_keterangan_surat' => $id_kat,
+		// 		)
+		// 	);
+		// }
+
+		// $data_notif = array(
+		// 	'id_surat' => $insert_id2['id_surat'],
+		// 	'id_status' => 1,
+		// 	'kepada' => $_SESSION['user_id'],
+		// 	'role' => array(3)
+		// );
+
+		// $results = $this->notif_model->send_notif($data_notif);
+
+		// if ($results) {
+		// 	$this->session->set_flashdata('msg', 'Berhasil!');
+		// 	redirect(base_url('mahasiswa/surat/tambah/' . $insert_id));
+		// }
 	}
 }

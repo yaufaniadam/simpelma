@@ -80,7 +80,6 @@
 					<div class="card-body pb-3">
 						Download Surat
 						<a href="<?= base_url("mahasiswa/surat/tampil_surat/" . $surat['id']); ?>" class="btn btn-success"> <i class="fas fa-file-pdf"></i> PDF</a>
-						<a href="<?= base_url("mahasiswa/surat/tampil_surat/" . $surat['id']); ?>" class="btn btn-success"> <i class="fas fa-print"></i> Print</a>
 					</div>
 				</div>
 			</div>

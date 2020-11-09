@@ -1,7 +1,18 @@
+<!-- catatan:
+error message pada field jika invalidnya masih muncul, padahal field yg salah sudah diganti isinya,
+mestinya ketika user mengganti, error messagenya langsung ilang -->
 <h1 class="h3 mb-4 text-gray-900"><?= $surat['kategori_surat']; ?> </h1>
 
 <div class="row">
 	<div class="col-8">
+		<?php if (isset($msg) || validation_errors() !== '') : ?>
+			<div class="alert alert-danger alert-dismissible">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				<h4><i class="fa fa-exclamation"></i> Terjadi Kesalahan</h4>
+				<?= validation_errors(); ?>
+				<?= isset($msg) ? $msg : ''; ?>
+			</div>
+		<?php endif; ?>
 		<!-- fash message yang muncul ketika proses penghapusan data berhasil dilakukan -->
 		<?php if ($this->session->flashdata('msg') != '') : ?>
 			<div class="alert alert-success flash-msg alert-dismissible">
@@ -46,7 +57,7 @@
 			</div>
 		<?php } ?>
 
-		<!-- Surat diproses oleh Direktur Pasca -->
+		<!-- Surat diproses oleh Direktur -->
 		<?php if (($surat['id_status'] == 8) && $this->session->userdata('role') == 5) { ?>
 
 			<div class="card shadow mb-3">
@@ -313,7 +324,9 @@
 						<?php echo form_open('admin/surat/terbitkan_surat'); ?>
 
 						<div class="form-group row">
-							<label class="col-md-4" for="">Nomor Surat</label>
+							<label class="col-md-4" for="">Nomor Surat
+								<small id="emailHelp" class="form-text text-muted">+1 dari nomor sebelumnya dengan kategori yang sama</small>
+							</label>
 							<div class="col-md-8">
 
 								<?php
@@ -328,8 +341,8 @@
 
 								<input type="hidden" name="id_surat" id="" value="<?= $surat['id']; ?>">
 								<input type="hidden" name="id_kategori_surat" id="" value="<?= $surat['id_kategori_surat'] ?>">
-								<input type="text" name="no_surat" id="" value="<?= $last_no ?>" class="form-control">
-
+								<input type="text" name="no_surat" id="" value="<?= $last_no ?>" class="form-control <?= (form_error('no_surat')) ? 'is-invalid' : ''; ?> ">
+								<span class="text-danger"><?php echo form_error('no_surat'); ?></span>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -338,21 +351,23 @@
 
 								<?php $tujuan_surat = $this->db->query("select * from kat_tujuan_surat")->result_array(); ?>
 
-								<select name="kat_tujuan_surat" id="kat_tujuan_surat" class="form-control">
+								<select name="kat_tujuan_surat" id="kat_tujuan_surat" class="form-control <?= (form_error('kat_tujuan_surat')) ? 'is-invalid' : ''; ?> ">
 									<option value="">Pilih Kategori Tujuan Surat</option>
 									<?php foreach ($tujuan_surat as $tujuan) { ?>
 										<option value="<?= $tujuan['id']; ?>"><?= $tujuan['kat_tujuan_surat']; ?></option>
 									<?php } ?>
 								</select>
+								<span class="text-danger"><?php echo form_error('kat_tujuan_surat'); ?></span>
 							</div>
 						</div>
 						<div class="form-group row">
 							<label class="col-md-4" for="">Tujuan Surat</label>
 							<div class="col-md-8">
 
-								<select name="tujuan_surat" id="tujuan_surat" class="form-control">
+								<select name="tujuan_surat" id="tujuan_surat" class="form-control <?= (form_error('tujuan_surat')) ? 'is-invalid' : ''; ?> ">
 									<option value="">Pilih Tujuan</option>
 								</select>
+								<span class="text-danger"><?php echo form_error('tujuan_surat'); ?></span>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -361,12 +376,13 @@
 
 								<?php $urusan_surat = $this->db->query("select * from urusan_surat")->result_array(); ?>
 
-								<select name="urusan_surat" id="" class="form-control">
+								<select name="urusan_surat" id="" class="form-control <?= (form_error('urusan_surat')) ? 'is-invalid' : ''; ?> ">
 									<option value="">Urusan Surat</option>
 									<?php foreach ($urusan_surat as $urusan) { ?>
 										<option value="<?= $urusan['kode']; ?>"><?= $urusan['urusan']; ?></option>
 									<?php } ?>
 								</select>
+								<span class="text-danger"><?php echo form_error('urusan_surat'); ?></span>
 							</div>
 						</div>
 
@@ -375,7 +391,8 @@
 								<small id="emailHelp" class="form-text text-muted">Tujuan surat bisa diganti jika diperlukan.</small>
 							</label>
 							<div class="col-md-8">
-								<textarea name="instansi" id="" cols="30" rows="3" class="textarea-summernote"><?= $surat['tujuan_surat']; ?></textarea>
+								<textarea name="instansi" id="" cols="30" rows="3" class="textarea-summernote <?= (form_error('instansi')) ? 'is-invalid' : ''; ?> "><?= $surat['tujuan_surat']; ?></textarea>
+								<span class="text-danger"><?php echo form_error('instansi'); ?></span>
 							</div>
 						</div>
 
@@ -396,7 +413,6 @@
 					<div class="card-body pb-3">
 						Download Surat
 						<a href="<?= base_url("admin/surat/tampil_surat/" . $surat['id']); ?>" class="btn btn-success"> <i class="fas fa-file-pdf"></i> PDF</a>
-						<a href="<?= base_url("admin/surat/tampil_surat/" . $surat['id']); ?>" class="btn btn-success"> <i class="fas fa-eye"></i> Pratinjau</a>
 					</div>
 				</div>
 			</div>
