@@ -59,13 +59,10 @@
 								Dosen</option>
 							<option value="p" <?= (validation_errors()) ? set_select('klien', 'p') : "";
 																echo ($kat['klien'] == 'p') ? "selected" : ""; ?>>
-								Prodi</option>
-							<option value="u" <?= (validation_errors()) ? set_select('klien', 'u') : "";
-																echo ($kat['klien'] == 'u') ? "selected" : ""; ?>>
-								Dosen</option>
-							<option value="i" <?= (validation_errors()) ? set_select('klien', 'i') : "";
+								Pascasarjana</option>
+							<option value="j" <?= (validation_errors()) ? set_select('klien', 'i') : "";
 																echo ($kat['klien'] == 'i') ? "selected" : ""; ?>>
-								Internal PPs</option>
+								Program Studi</option>
 						</select>
 						<span class="text-danger" style="font-size: 80%;"><?php echo form_error('klien'); ?></span>
 					</div>

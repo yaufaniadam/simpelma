@@ -42,6 +42,7 @@ class Surat_model extends CI_Model
         $query = $this->db->query("SELECT 
         s.id, 
         s.id_kategori_surat, 
+        s.id_mahasiswa, 
         k.kategori_surat, 
         k.klien, 
         k.template, 
@@ -83,10 +84,14 @@ class Surat_model extends CI_Model
     public function get_kategori_surat($klien)
     {
 
-        $prodi = $_SESSION['id_prodi'];
+        if ($klien == '') {
+            $where = '';
+        } else {
+            $where = "WHERE klien='$klien'";
+        }
 
         $query = $this->db->query("SELECT * FROM kategori_surat 
-        WHERE klien='$klien'
+            $where;
         ");
 
 

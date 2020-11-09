@@ -121,6 +121,12 @@
 			table.columns(2).search(this.value).draw();
 		});
 
+		var table = $('#kategorisurat').DataTable();
+		$('#selectpengguna').on('change', function() {
+			table.columns(1).search(this.value).draw();
+		});
+
+
 		$(document).ready(function() {
 			$('#datatable-desc').DataTable({
 				"order": [
