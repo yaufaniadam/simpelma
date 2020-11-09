@@ -350,6 +350,18 @@ class Surat extends Admin_Controller
 
 		// $results = $this->notif_model->send_notif($data_notif);
 
+
+		$this->load->library('email');
+
+
+		$this->email->from('yaufani@gmail.com', 'yaufani Adam');
+		$this->email->to('yaufani@gmail.com');
+
+		$this->email->subject('Email Test');
+		$this->email->message('Testing the email class.');
+
+		$this->email->send();
+
 		// if ($results) {
 		$this->session->set_flashdata('msg', 'Berhasil!');
 		redirect(base_url('admin/surat/tambah/' . $insert_id));

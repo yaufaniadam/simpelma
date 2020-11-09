@@ -153,6 +153,9 @@ class Surat extends Mahasiswa_Controller
 						->where(array('id' => $id_notif, 'status' => 0))
 						->update('notif');
 
+					//mailer di sini
+
+
 					if ($set_status) {
 						redirect(base_url('mahasiswa/surat/tambah/' . $id_surat));
 					}
