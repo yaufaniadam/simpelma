@@ -40,9 +40,14 @@ class Mailer
             <p>© 2018 CodeGlamoour - All rights reserved</p>
     ';
 		return $tpl;		
-	}
+  }
+  
+  function tambahsurat() {
+
+    $tpl = "Tambah Surat";
+    return $tpl;
+  }
 
 	
 
 }
-?>

@@ -4,6 +4,7 @@ class Surat extends Mahasiswa_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('mailer');
 		$this->load->model('surat_model', 'surat_model');
 		$this->load->model('notif/Notif_model', 'notif_model');
 	}
@@ -77,6 +78,8 @@ class Surat extends Mahasiswa_Controller
 		);
 
 		$results = $this->notif_model->send_notif($data_notif);
+
+
 
 		if ($results) {
 			$this->session->set_flashdata('msg', 'Berhasil!');

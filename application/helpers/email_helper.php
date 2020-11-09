@@ -57,8 +57,3 @@ function sendEmail($to = '', $subject  = '', $body = '', $attachment = '', $cc =
 		  
         
     }
-	
-	
-	
-
-?>
