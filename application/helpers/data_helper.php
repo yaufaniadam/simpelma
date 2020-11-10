@@ -105,7 +105,12 @@ function kat_keterangan_surat($id)
 
 //menampilkan kategori keterangan surat
 function generate_form_field($id, $id_surat, $id_status)
-{
+{ ?>
+
+	<link href="<?= base_url() ?>public/plugins/danielupload/dist/css/jquery.dm-uploader.min.css" rel="stylesheet">
+	<link href="<?= base_url() ?>public/plugins/danielupload/dist/css/styles.css" rel="stylesheet">
+
+	<?php
 	$CI = &get_instance();
 	$fields = $CI->db->select('kks.*, ks.value, ks.verifikasi')->from('kat_keterangan_surat kks')
 		->join('keterangan_surat ks', 'ks.id_kat_keterangan_surat=kks.id', 'left')
@@ -127,7 +132,7 @@ function generate_form_field($id, $id_surat, $id_status)
 			$image = "base_url('public/dist/img/logo.png')";
 			$thumb = '';
 		}
-?>
+	?>
 
 		<figure style="background:url('<?= $image; ?>') center center no-repeat" class="d-flex align-items-center justify-content-center upload-dokumen <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($fields['verifikasi'] == 0) && ($id_status == 4)) ? 'is-invalid' : ''; ?>">
 			<?php
@@ -286,8 +291,8 @@ function fileUploaderModal()
 		</div>
 	</script>
 
-	<script src="<?= base_url() ?>/public/vendor/danielupload/dist/js/jquery.dm-uploader.min.js"></script>
-	<script src="<?= base_url() ?>/public/vendor/danielupload/demo/ui-single.js"></script>
+	<script src="<?= base_url() ?>public/plugins/danielupload/dist/js/jquery.dm-uploader.min.js"></script>
+	<script src="<?= base_url() ?>public/plugins/danielupload/dist/ui-single.js"></script>
 
 	<script>
 		$(function() {
