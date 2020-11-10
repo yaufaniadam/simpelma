@@ -107,8 +107,8 @@ function kat_keterangan_surat($id)
 function generate_form_field($id, $id_surat, $id_status)
 { ?>
 
-	<link href="<?= base_url() ?>public/plugins/danielupload/dist/css/jquery.dm-uploader.min.css" rel="stylesheet">
-	<link href="<?= base_url() ?>public/plugins/danielupload/dist/css/styles.css" rel="stylesheet">
+	<link href="<?= base_url() ?>public/plugins/dm-upload/dist/css/jquery.dm-upload.min.css" rel="stylesheet">
+	<link href="<?= base_url() ?>public/plugins/dm-upload/dist/css/styles.css" rel="stylesheet">
 
 	<?php
 	$CI = &get_instance();
@@ -225,7 +225,7 @@ function fileUploaderModal()
 
 					<div class="tab-content" id="nav-tabContent">
 						<div class="tab-pane fade show active" id="nav-upload" role="tabpanel" aria-labelledby="nav-upload-tab">
-							<form class="mb-3 mt-3 dm-uploader p-5" id="drag-and-drop-zone">
+							<form class="mb-3 mt-3 dm-upload p-5" id="drag-and-drop-zone">
 								<div class="form-row">
 									<div class="col-md-12 col-sm-12">
 										<div class="form-group mb-2">
@@ -291,8 +291,8 @@ function fileUploaderModal()
 		</div>
 	</script>
 
-	<script src="<?= base_url() ?>public/plugins/danielupload/dist/js/jquery.dm-uploader.min.js"></script>
-	<script src="<?= base_url() ?>public/plugins/danielupload/dist/ui-single.js"></script>
+	<script src="<?= base_url() ?>public/plugins/dm-upload/dist/js/jquery.dm-upload.min.js"></script>
+	<script src="<?= base_url() ?>public/plugins/dm-upload/dist/ui-single.js"></script>
 
 	<script>
 		$(function() {
